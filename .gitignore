@@ -1,0 +1,34 @@
+# Node dependencies
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Python virtual environment & cache
+__pycache__/
+*/__pycache__/
+*/*/__pycache__/
+*.py[cod]
+*$py.class
+backend/.venv/
+.venv/
+env/
+venv/
+
+# Database & local media
+*.db
+backend/agrisathi.db
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Environment variables
+.env
+.env.local
+*.env
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

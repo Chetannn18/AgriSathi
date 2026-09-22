@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
+  <defs>
+    <radialGradient id="bgGrad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#24382c"/>
+      <stop offset="100%" stop-color="#111c16"/>
+    </radialGradient>
+    <linearGradient id="leafGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#40916c"/>
+      <stop offset="40%" stop-color="#2d6a4f"/>
+      <stop offset="100%" stop-color="#1b4332"/>
+    </linearGradient>
+    <radialGradient id="targetSpot1" cx="45%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#2b1704"/>
+      <stop offset="35%" stop-color="#582f0e"/>
+      <stop offset="65%" stop-color="#7f4f24"/>
+      <stop offset="85%" stop-color="#dda15e"/>
+      <stop offset="100%" stop-color="#dda15e" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="targetSpot2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e1003"/>
+      <stop offset="40%" stop-color="#432818"/>
+      <stop offset="70%" stop-color="#6f4e37"/>
+      <stop offset="90%" stop-color="#e9c46a"/>
+      <stop offset="100%" stop-color="#e9c46a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="600" height="450" fill="url(#bgGrad)"/>
+  <rect width="600" height="450" fill="none" stroke="#2d6a4f" stroke-width="1" stroke-opacity="0.3"/>
+
+  <!-- Tomato Leaf Silhouette -->
+  <g transform="translate(60, 40)">
+    <!-- Main stem -->
+    <path d="M 230 380 Q 235 240 240 70" stroke="#74c69d" stroke-width="6" fill="none" stroke-linecap="round"/>
+    
+    <!-- Central Leaf Blade -->
+    <path d="M 240 70 C 150 100 130 200 180 280 C 200 310 230 340 240 370 C 255 340 290 300 310 270 C 350 200 330 100 240 70 Z" fill="url(#leafGrad)"/>
+    
+    <!-- Left Leaflet -->
+    <path d="M 200 250 C 90 230 60 150 110 110 C 140 90 190 140 205 200 Z" fill="#2d6a4f" fill-opacity="0.95"/>
+    
+    <!-- Right Leaflet -->
+    <path d="M 270 240 C 370 210 400 130 350 100 C 310 80 275 140 265 190 Z" fill="#2d6a4f" fill-opacity="0.95"/>
+
+    <!-- Vein Structure -->
+    <path d="M 240 85 Q 238 220 235 360" stroke="#52b788" stroke-width="3" fill="none" stroke-opacity="0.7"/>
+    <path d="M 238 140 Q 180 120 120 115" stroke="#52b788" stroke-width="2" fill="none" stroke-opacity="0.6"/>
+    <path d="M 238 180 Q 300 160 355 120" stroke="#52b788" stroke-width="2" fill="none" stroke-opacity="0.6"/>
+    <path d="M 237 230 Q 170 240 130 245" stroke="#52b788" stroke-width="2" fill="none" stroke-opacity="0.6"/>
+    <path d="M 237 270 Q 290 280 320 275" stroke="#52b788" stroke-width="2" fill="none" stroke-opacity="0.6"/>
+
+    <!-- Early Blight Concentric Target Ring Lesions -->
+    <!-- Spot 1 (Large Lower Leaf) -->
+    <circle cx="210" cy="230" r="42" fill="url(#targetSpot1)"/>
+    <circle cx="210" cy="230" r="32" stroke="#2b1704" stroke-width="2" fill="none" opacity="0.8"/>
+    <circle cx="210" cy="230" r="22" stroke="#582f0e" stroke-width="2.5" fill="none" opacity="0.9"/>
+    <circle cx="210" cy="230" r="12" stroke="#241403" stroke-width="3" fill="none"/>
+    <circle cx="210" cy="230" r="5" fill="#150a01"/>
+
+    <!-- Spot 2 (Upper Right) -->
+    <circle cx="275" cy="160" r="34" fill="url(#targetSpot2)"/>
+    <circle cx="275" cy="160" r="24" stroke="#432818" stroke-width="2" fill="none" opacity="0.8"/>
+    <circle cx="275" cy="160" r="14" stroke="#1e1003" stroke-width="2.5" fill="none"/>
+    <circle cx="275" cy="160" r="4" fill="#120800"/>
+
+    <!-- Spot 3 (Small Tip Spore) -->
+    <circle cx="160" cy="150" r="22" fill="url(#targetSpot1)"/>
+    <circle cx="160" cy="150" r="12" stroke="#432818" stroke-width="1.8" fill="none"/>
+
+    <!-- AI Bounding Box & Diagnostic Overlay -->
+    <rect x="155" y="175" width="110" height="110" rx="8" fill="none" stroke="#52b788" stroke-width="2" stroke-dasharray="6,4"/>
+    <rect x="155" y="152" width="125" height="22" rx="4" fill="#1b4332" stroke="#52b788" stroke-width="1"/>
+    <text x="162" y="167" fill="#74c69d" font-family="sans-serif" font-size="11" font-weight="bold">Early Blight 91%</text>
+  </g>
+
+  <!-- Specimen Label -->
+  <rect x="20" y="390" width="220" height="42" rx="6" fill="#143628" fill-opacity="0.85" stroke="#2d6a4f" stroke-width="1"/>
+  <text x="32" y="408" fill="#ffffff" font-family="sans-serif" font-size="13" font-weight="bold">Tomato (Lycopersicon)</text>
+  <text x="32" y="423" fill="#a3b18a" font-family="sans-serif" font-size="11">Alternaria solani • Early Blight</text>
+</svg>
