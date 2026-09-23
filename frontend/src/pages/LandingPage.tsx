@@ -1,244 +1,216 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Camera, MessageSquare, ShieldCheck, ArrowRight, Globe2, CloudSun, Leaf, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Camera, MessageSquare, ArrowDown, Sparkles, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
+// Landing Page Modular Storytelling Components
+import { HeroFieldCanvas } from '../components/landing/HeroFieldCanvas';
+import { ScanningLeafHUD } from '../components/landing/ScanningLeafHUD';
+import { MacroLeafScanner } from '../components/landing/MacroLeafScanner';
+import { MultimodalIntelligenceOrb } from '../components/landing/MultimodalIntelligenceOrb';
+import { DiagnosisCardShowcase } from '../components/landing/DiagnosisCardShowcase';
+import { DetectionToDecisionFlow } from '../components/landing/DetectionToDecisionFlow';
+import { AgriculturalKnowledgeRAG } from '../components/landing/AgriculturalKnowledgeRAG';
+import { VernacularSpeechSection } from '../components/landing/VernacularSpeechSection';
+import { WeatherContextSection } from '../components/landing/WeatherContextSection';
+import { CropJourneyTimeline } from '../components/landing/CropJourneyTimeline';
+import { BentoFeaturesGrid } from '../components/landing/BentoFeaturesGrid';
+import { AgriSathiMomentAndClosing } from '../components/landing/AgriSathiMomentAndClosing';
+
 export const LandingPage: React.FC = () => {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
 
   return (
-    <div className="space-y-16 pb-16">
+    <div className="relative w-full bg-[#040d0a] text-white selection:bg-emerald-600 selection:text-white overflow-hidden">
       
-      {/* 1. HERO SECTION */}
-      <section className="relative pt-6 sm:pt-12 overflow-hidden">
-        {/* Organic background aura */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-leaf-light/20 rounded-full blur-3xl -z-10 pointer-events-none" />
+      {/* ==================================================
+          HERO SECTION — 100vh FULL-SCREEN CINEMATIC ATMOSPHERE
+          ================================================== */}
+      <section
+        id="hero"
+        className="relative min-h-screen flex flex-col justify-between pt-24 sm:pt-28 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden z-10"
+      >
+        {/* Living Animated Field Backdrop */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          <img
+            src="/assets/landing/hero_field_sunrise.jpg"
+            alt="Sunrise agricultural field"
+            className="w-full h-full object-cover filter brightness-[0.48] contrast-[1.08] scale-105 animate-wind-drift"
+          />
+          {/* Subtle gradient overlay to enhance typography contrast */}
+          <div className="absolute inset-0 bg-gradient-to-b from-[#040d0a]/75 via-[#040d0a]/30 to-[#040d0a]" />
+          {/* Floating canvas particles (pollen, sunlight rays, dew shimmer) */}
+          <HeroFieldCanvas />
+        </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        {/* Hero Content Grid: Editorial Headline + Floating Glass HUD */}
+        <div className="relative z-20 max-w-7xl mx-auto w-full my-auto py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
             
-            {/* Left Content */}
-            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+            {/* Left Column: Large Editorial Typography & CTAs */}
+            <div className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left">
               
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-100/80 border border-forest-200 text-forest-800 text-xs font-semibold">
-                <Sparkles className="w-3.5 h-3.5 text-forest-600" />
-                <span>Multimodal AI for Indian Agriculture • ICAR Grounded</span>
+              {/* Trust Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-900/80 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-medium backdrop-blur-md shadow-lg">
+                <Sparkles className="w-3.5 h-3.5 text-leaf-light animate-pulse" />
+                <span>Multimodal Indian AgriTech • From Leaf to Action</span>
               </div>
 
-              <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-forest-900 leading-[1.15]">
-                {t('heroHeadline')}
+              {/* Headline */}
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight text-white leading-[1.08]">
+                Your Crop's <br />
+                <span className="font-editorial italic font-normal bg-gradient-to-r from-emerald-300 via-leaf-light to-lime-300 bg-clip-text text-transparent">
+                  AI Companion.
+                </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                {t('heroSubtitle')}
+              {/* Editorial Subheadline */}
+              <p className="text-lg sm:text-xl text-gray-200 font-light max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                See what's happening in your crop. <br className="hidden sm:inline" />
+                Understand the problem. <br className="hidden sm:inline" />
+                <span className="text-white font-medium">Know what to do next.</span>
               </p>
 
-              {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+              {/* Primary & Secondary Action CTAs */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                
+                {/* Primary CTA -> /scan */}
                 <Link
                   to="/scan"
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-forest-600 text-white font-semibold text-base shadow-lg shadow-forest-600/30 hover:bg-forest-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-forest-500 hover:bg-forest-400 text-white font-bold text-base shadow-xl shadow-forest-950/70 hover:shadow-emerald-500/25 active:scale-95 transition-all flex items-center justify-center gap-2.5"
                 >
                   <Camera className="w-5 h-5 text-leaf-light" />
-                  <span>{t('checkCrop')}</span>
+                  <span>{language === 'hi' ? 'फसल जांचें' : 'Check My Crop'}</span>
                 </Link>
 
+                {/* Secondary CTA -> /assistant */}
                 <Link
                   to="/assistant"
-                  className="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-white border border-forest-200 text-forest-800 font-semibold text-base shadow-sm hover:bg-forest-50 active:scale-95 transition-all flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-forest-950/70 hover:bg-forest-900/90 border border-emerald-500/40 text-gray-100 font-semibold text-base shadow-lg backdrop-blur-md active:scale-95 transition-all flex items-center justify-center gap-2.5"
                 >
-                  <MessageSquare className="w-5 h-5 text-forest-600" />
-                  <span>{t('assistant')}</span>
+                  <MessageSquare className="w-5 h-5 text-emerald-400" />
+                  <span>{language === 'hi' ? 'पूछें एग्रीसाथी' : 'Ask AgriSathi'}</span>
                 </Link>
 
-                <Link
-                  to="/dashboard"
-                  className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-forest-100/70 text-forest-800 font-medium text-sm hover:bg-forest-100 transition-colors flex items-center justify-center gap-1.5"
-                >
-                  <span>{t('tryDemo')}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
               </div>
 
-              {/* Feature Pills */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4 text-xs font-semibold text-forest-800">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Vision Quality Check</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Voice & Vernacular Hindi</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Human Expert Escalation</span>
-                </div>
+              {/* Value Pillar Markers */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-2 text-xs font-mono text-emerald-200/80">
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  Visual Diagnosis in 3 Seconds
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  Spoken Hindi & English
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  Field Tested Guidance
+                </span>
               </div>
 
             </div>
 
-            {/* Right Visual: Glass Card with Crop Scanning Demonstration */}
-            <div className="lg:col-span-5 relative">
-              <div className="glass-panel p-4 sm:p-5 rounded-3xl border border-white/60 shadow-2xl relative overflow-hidden">
-                
-                {/* Crop Image Mockup */}
-                <div className="relative rounded-2xl overflow-hidden aspect-4/3 bg-forest-950 border border-forest-700/50 shadow-inner">
-                  <img
-                    src="/assets/demo/leaf_tomato.jpg"
-                    alt="Tomato Early Blight Diagnosis"
-                    className="w-full h-full object-cover opacity-90"
-                  />
-                  
-                  {/* Subtle Scanning Line */}
-                  <div className="animate-scan-line" />
-
-                  {/* Diagnostic Bounding Box */}
-                  <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 border-2 border-leaf-light rounded-xl border-dashed flex items-center justify-center">
-                    <span className="bg-forest-900/90 text-leaf-light px-2.5 py-1 rounded text-xs font-mono font-bold tracking-wide">
-                      AI Scanning...
-                    </span>
-                  </div>
-
-                  {/* Floating AI Diagnostic Tag */}
-                  <div className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md p-3 rounded-xl shadow-lg border border-forest-100 flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-forest-600 block">
-                        Tomato • Lycopersicon
-                      </span>
-                      <h4 className="font-display font-bold text-sm text-forest-900">
-                        Possible Early Blight
-                      </h4>
-                    </div>
-                    <div className="text-right">
-                      <span className="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-0.5 rounded-full">
-                        Confidence: 91%
-                      </span>
-                      <span className="text-[10px] text-amber-700 font-semibold block mt-0.5">
-                        Severity: Moderate
-                      </span>
-                    </div>
-                  </div>
-
-                </div>
-
-                <div className="mt-3.5 px-2 flex items-center justify-between text-xs text-gray-500">
-                  <span className="flex items-center gap-1">
-                    <Leaf className="w-3.5 h-3.5 text-forest-600" />
-                    ICAR Knowledge Verified
-                  </span>
-                  <span>Zero Cloud Setup Needed</span>
-                </div>
-
-              </div>
+            {/* Right Column: Floating Translucent AI Diagnostic HUD */}
+            <div className="lg:col-span-5 flex justify-center">
+              <ScanningLeafHUD />
             </div>
 
           </div>
         </div>
-      </section>
 
-      {/* 2. HOW IT WORKS (Capture → Understand → Act) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-10">
-          <span className="text-xs font-bold uppercase tracking-widest text-forest-600 block">
-            Three Simple Steps
+        {/* Scroll Indicator */}
+        <div className="relative z-20 flex flex-col items-center justify-center space-y-2 text-xs font-mono text-gray-400 pt-6">
+          <span className="tracking-widest uppercase text-[10px] text-emerald-300">
+            Scroll to explore
           </span>
-          <h2 className="font-display font-bold text-3xl text-forest-900 mt-1">
-            {t('howItWorks')}
-          </h2>
-          <p className="text-sm text-gray-600 mt-2">
-            A frictionless workflow built specifically for field farmers and agricultural learners.
-          </p>
+          <div className="w-5 h-9 rounded-full border border-emerald-500/40 flex items-start justify-center p-1 bg-black/40 backdrop-blur-xs">
+            <div className="w-1.5 h-2.5 rounded-full bg-emerald-400 animate-bounce mt-0.5" />
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
-          <div className="glass-panel p-6 rounded-2xl border border-forest-100/80 shadow-card-soft text-left hover:-translate-y-1 transition-transform">
-            <div className="w-12 h-12 rounded-xl bg-forest-600 text-white flex items-center justify-center mb-4 shadow-md shadow-forest-600/20 font-bold text-lg">
-              📷
-            </div>
-            <h3 className="font-display font-bold text-lg text-forest-900 mb-2">
-              {t('step1Title')}
-            </h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              {t('step1Desc')}
-            </p>
-          </div>
-
-          <div className="glass-panel p-6 rounded-2xl border border-forest-100/80 shadow-card-soft text-left hover:-translate-y-1 transition-transform">
-            <div className="w-12 h-12 rounded-xl bg-leaf-dark text-white flex items-center justify-center mb-4 shadow-md shadow-leaf-dark/20 font-bold text-lg">
-              🔍
-            </div>
-            <h3 className="font-display font-bold text-lg text-forest-900 mb-2">
-              {t('step2Title')}
-            </h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              {t('step2Desc')}
-            </p>
-          </div>
-
-          <div className="glass-panel p-6 rounded-2xl border border-forest-100/80 shadow-card-soft text-left hover:-translate-y-1 transition-transform">
-            <div className="w-12 h-12 rounded-xl bg-earth-400 text-white flex items-center justify-center mb-4 shadow-md shadow-earth-400/20 font-bold text-lg">
-              🌱
-            </div>
-            <h3 className="font-display font-bold text-lg text-forest-900 mb-2">
-              {t('step3Title')}
-            </h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              {t('step3Desc')}
-            </p>
-          </div>
-
-        </div>
       </section>
 
-      {/* 3. MULTIMODAL AI & CORE PILLARS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-forest-900 text-white rounded-3xl p-8 sm:p-12 shadow-xl relative overflow-hidden">
-          
-          <div className="max-w-3xl relative z-10 space-y-6">
-            <span className="text-xs uppercase font-bold tracking-widest text-leaf-light">
-              End-to-End Multimodal Intelligence
-            </span>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-white">
-              Computer Vision + Speech AI + RAG + Weather Context
-            </h2>
-            <p className="text-forest-100 text-base leading-relaxed">
-              AgriSathi does not produce generic chatbot hallucination. Every response is synthesized by crossing leaf symptom metrics with verified research bulletins from ICAR, KVK, and IMD Agromet advisories.
-            </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/10">
-                <h4 className="font-bold text-leaf-light text-sm mb-1">🖼 Computer Vision & Quality Assurance</h4>
-                <p className="text-xs text-forest-100">Evaluates blur, brightness, and resolution before scanning leaf lesions.</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/10">
-                <h4 className="font-bold text-leaf-light text-sm mb-1">🎙 Vernacular Speech & Audio</h4>
-                <p className="text-xs text-forest-100">Supports spoken Hindi and English queries with immediate audio readout.</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/10">
-                <h4 className="font-bold text-leaf-light text-sm mb-1">📚 Grounded Agricultural RAG</h4>
-                <p className="text-xs text-forest-100">Embeds institutional bulletins from CPRI, IIVR, NRRI, and CICR.</p>
-              </div>
-              <div className="bg-white/10 backdrop-blur-xs p-4 rounded-xl border border-white/10">
-                <h4 className="font-bold text-leaf-light text-sm mb-1">⛅ Microclimate Disease Alerts</h4>
-                <p className="text-xs text-forest-100">Calculates humidity thresholds and rain probability to flag fungal outbreaks.</p>
-              </div>
-            </div>
-
-            <div className="pt-4">
-              <Link
-                to="/scan"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-leaf-light text-forest-950 font-bold hover:bg-emerald-400 transition-colors"
-              >
-                <span>Start Checking Your Crop</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-
-        </div>
+      {/* ==================================================
+          SECTION 01 & 02 — "EVERY LEAF TELLS A STORY" & "AI SEES WHAT YOU SEE"
+          ================================================== */}
+      <section id="how-it-works" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 z-10">
+        <MacroLeafScanner />
       </section>
+
+
+      {/* ==================================================
+          SECTION 03 — MULTIMODAL AI (IMAGE • VOICE • TEXT)
+          ================================================== */}
+      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-forest-950/60 border-y border-emerald-500/15 z-10">
+        <MultimodalIntelligenceOrb />
+      </section>
+
+
+      {/* ==================================================
+          SECTION 04 — THE AI DIAGNOSIS INTERFACE
+          ================================================== */}
+      <section id="ai-diagnosis" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 z-10">
+        <DiagnosisCardShowcase />
+      </section>
+
+
+      {/* ==================================================
+          SECTION 05 — FROM DETECTION TO DECISION (DETECT → UNDERSTAND → ADVISE → ACT)
+          ================================================== */}
+      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-forest-950/60 border-y border-emerald-500/15 z-10">
+        <DetectionToDecisionFlow />
+      </section>
+
+
+      {/* ==================================================
+          SECTION 06 — AGRICULTURAL KNOWLEDGE (GROUNDED RAG)
+          ================================================== */}
+      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 z-10">
+        <AgriculturalKnowledgeRAG />
+      </section>
+
+
+      {/* ==================================================
+          SECTION 07 — VERNACULAR AI (ENGLISH ↔ HINDI TRANSFORMATION)
+          ================================================== */}
+      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-forest-950/60 border-y border-emerald-500/15 z-10">
+        <VernacularSpeechSection />
+      </section>
+
+
+      {/* ==================================================
+          SECTION 08 — WEATHER CONTEXT & MICROCLIMATE RISK
+          ================================================== */}
+      <section className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 z-10">
+        <WeatherContextSection />
+      </section>
+
+
+      {/* ==================================================
+          SECTION 09 — PERSONAL CROP JOURNEY (DAY 1 TO HARVEST)
+          ================================================== */}
+      <section id="about" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 bg-forest-950/60 border-y border-emerald-500/15 z-10">
+        <CropJourneyTimeline />
+      </section>
+
+
+      {/* ==================================================
+          SECTION 10 — BENTO FEATURES MATRIX
+          ================================================== */}
+      <section id="features" className="relative py-24 sm:py-32 px-4 sm:px-6 lg:px-8 z-10">
+        <BentoFeaturesGrid />
+      </section>
+
+
+      {/* ==================================================
+          SECTIONS 11 & 12 — THE AGriSATHI MOMENT, CLOSING CTA & FOOTER
+          ================================================== */}
+      <div className="relative pt-12 z-10">
+        <AgriSathiMomentAndClosing />
+      </div>
 
     </div>
   );

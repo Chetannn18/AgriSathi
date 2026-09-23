@@ -1,12 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400;1,6..72,600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-[#fbfbfa] text-[#1c2e24] font-sans antialiased selection:bg-forest-200 selection:text-forest-900;
+    @apply bg-[#040d0a] text-[#1c2e24] font-sans antialiased selection:bg-emerald-600 selection:text-white;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -14,35 +19,48 @@
   }
 }
 
+.font-editorial {
+  font-family: 'Newsreader', Georgia, serif;
+}
+
 /* Custom Glassmorphic Card styles */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  box-shadow: 0 10px 30px -5px rgba(27, 67, 50, 0.05);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 10px 30px -5px rgba(27, 67, 50, 0.06);
 }
 
 .glass-panel-dark {
-  background: rgba(20, 54, 40, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(82, 183, 136, 0.2);
+  background: rgba(8, 28, 21, 0.82);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(82, 183, 136, 0.22);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
+.glass-hud {
+  background: rgba(4, 13, 10, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(116, 198, 157, 0.35);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 0 20px 0 rgba(82, 183, 136, 0.08);
 }
 
 /* Animated Leaf Scanner Line */
 @keyframes scanMove {
   0% {
-    top: 0%;
-    opacity: 0.8;
+    top: 2%;
+    opacity: 0.9;
   }
   50% {
     top: 96%;
     opacity: 1;
   }
   100% {
-    top: 0%;
-    opacity: 0.8;
+    top: 2%;
+    opacity: 0.9;
   }
 }
 
@@ -51,9 +69,9 @@
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, transparent, #52b788, #74c69d, transparent);
-  box-shadow: 0 0 15px 3px rgba(82, 183, 136, 0.8);
-  animation: scanMove 2.5s ease-in-out infinite;
+  background: linear-gradient(90deg, transparent, #52b788, #74c69d, #a3e635, transparent);
+  box-shadow: 0 0 18px 4px rgba(82, 183, 136, 0.85);
+  animation: scanMove 3s ease-in-out infinite;
 }
 
 /* Audio Pulse Waveform Animation */
@@ -73,3 +91,20 @@
 .wave-bar:nth-child(3) { animation-delay: 0.3s; }
 .wave-bar:nth-child(4) { animation-delay: 0.45s; }
 .wave-bar:nth-child(5) { animation-delay: 0.6s; }
+.wave-bar:nth-child(6) { animation-delay: 0.2s; }
+.wave-bar:nth-child(7) { animation-delay: 0.5s; }
+.wave-bar:nth-child(8) { animation-delay: 0.35s; }
+
+/* Subtle wind drift animation */
+@keyframes windDrift {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(12px, -8px) rotate(1.5deg);
+  }
+}
+
+.animate-wind-drift {
+  animation: windDrift 8s ease-in-out infinite;
+}

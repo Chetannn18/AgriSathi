@@ -6,6 +6,9 @@ import { useLanguage } from '../context/LanguageContext';
 export const MobileNavigation: React.FC = () => {
   const { t } = useLanguage();
   const location = useLocation();
+  if (location.pathname === '/') {
+    return null;
+  }
 
   const navItems = [
     { to: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },

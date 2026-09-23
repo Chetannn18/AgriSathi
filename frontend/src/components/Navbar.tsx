@@ -1,11 +1,16 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Sprout, Camera, MessageSquare, CloudSun, BookOpen, Clock, ShieldCheck, Globe, UserCheck } from 'lucide-react';
+import { Sprout, Camera, MessageSquare, CloudSun, BookOpen, Clock, ShieldCheck, Globe } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
+import { LandingNavbar } from './LandingNavbar';
 
 export const Navbar: React.FC = () => {
   const { language, setLanguage, t } = useLanguage();
   const location = useLocation();
+
+  if (location.pathname === '/') {
+    return <LandingNavbar />;
+  }
 
   const navLinks = [
     { to: '/dashboard', label: t('dashboard'), icon: Sprout },
