@@ -16,6 +16,8 @@ import { DiseaseDetailPage } from './pages/DiseaseDetailPage';
 import { WeatherPage } from './pages/WeatherPage';
 import { ExpertPage } from './pages/ExpertPage';
 import { ProfilePage } from './pages/ProfilePage';
+import { MandiPage } from './pages/MandiPage';
+import { CalculatorPage } from './pages/CalculatorPage';
 
 export function App() {
   return (
@@ -31,6 +33,8 @@ export function App() {
               <Route path="/scan" element={<ScanPage />} />
               <Route path="/diagnosis/:id" element={<DiagnosisDetailPage />} />
               <Route path="/assistant" element={<AssistantPage />} />
+              <Route path="/mandi" element={<MandiPage />} />
+              <Route path="/calculator" element={<CalculatorPage />} />
               <Route path="/farms" element={<FarmsPage />} />
               <Route path="/history" element={<HistoryPage />} />
               <Route path="/diseases" element={<DiseasesPage />} />

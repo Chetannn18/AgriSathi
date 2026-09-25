@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Camera, MessageSquare, Sprout, BookOpen, AlertTriangle, ArrowRight, Clock, ShieldCheck } from 'lucide-react';
+import { Camera, MessageSquare, Sprout, BookOpen, AlertTriangle, ArrowRight, Clock, ShieldCheck, TrendingUp, Calculator } from 'lucide-react';
 import { api } from '../services/api';
 import { Farm, Diagnosis, WeatherData } from '../types';
 import { useLanguage } from '../context/LanguageContext';
@@ -158,13 +158,38 @@ export const DashboardPage: React.FC = () => {
 
       </div>
 
-      {/* 4. QUICK ACTIONS GRID */}
+      {/* 4. LIVE MANDI TICKER BANNER */}
+      <div className="glass-panel p-4 rounded-2xl border border-forest-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-forest-50 border border-forest-200 flex items-center justify-center text-forest-700 shrink-0">
+            <TrendingUp className="w-5 h-5 text-emerald-600" />
+          </div>
+          <div className="min-w-0">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-forest-600 block">
+              {language === 'hi' ? 'आज का लाइव मंडी भाव' : 'Today\'s Live Mandi Rates'}
+            </span>
+            <p className="text-xs font-bold text-forest-900 truncate">
+              सोयाबीन: ₹4,980/Qtl (+₹110) • गेहूं: ₹3,120/Qtl • सरसों: ₹5,680/Qtl • कपास: ₹7,380/Qtl
+            </p>
+          </div>
+        </div>
+
+        <Link
+          to="/mandi"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-forest-600 text-white text-xs font-bold hover:bg-forest-700 transition-colors shrink-0"
+        >
+          <span>{language === 'hi' ? 'सभी मंडियां देखें' : 'View All Mandis'}</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
+      {/* 5. QUICK ACTIONS GRID */}
       <div>
         <h3 className="font-display font-bold text-lg text-forest-900 mb-3">
           {t('quickActions')}
         </h3>
         
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
           
           <Link
             to="/scan"
@@ -177,7 +202,37 @@ export const DashboardPage: React.FC = () => {
               {t('checkCrop')}
             </h4>
             <p className="text-[11px] text-gray-500">
-              Upload leaf photo for disease prediction
+              AI leaf diagnosis & advice
+            </p>
+          </Link>
+
+          <Link
+            to="/mandi"
+            className="glass-panel p-4 rounded-xl border border-forest-100/90 shadow-card-soft hover:border-forest-400 hover:-translate-y-0.5 transition-all text-left group"
+          >
+            <div className="w-10 h-10 rounded-lg bg-emerald-600 text-white flex items-center justify-center mb-3 shadow-sm group-hover:bg-emerald-500 transition-colors">
+              <TrendingUp className="w-5 h-5" />
+            </div>
+            <h4 className="font-bold text-sm text-forest-900 mb-0.5">
+              {language === 'hi' ? 'मंडी भाव' : 'Mandi Rates'}
+            </h4>
+            <p className="text-[11px] text-gray-500">
+              Live APMC prices & trends
+            </p>
+          </Link>
+
+          <Link
+            to="/calculator"
+            className="glass-panel p-4 rounded-xl border border-forest-100/90 shadow-card-soft hover:border-forest-400 hover:-translate-y-0.5 transition-all text-left group"
+          >
+            <div className="w-10 h-10 rounded-lg bg-amber-600 text-white flex items-center justify-center mb-3 shadow-sm group-hover:bg-amber-500 transition-colors">
+              <Calculator className="w-5 h-5" />
+            </div>
+            <h4 className="font-bold text-sm text-forest-900 mb-0.5">
+              {language === 'hi' ? 'खाद कैलकुलेटर' : 'Calculator'}
+            </h4>
+            <p className="text-[11px] text-gray-500">
+              Urea, DAP & seed dosage
             </p>
           </Link>
 
@@ -192,7 +247,7 @@ export const DashboardPage: React.FC = () => {
               {t('assistant')}
             </h4>
             <p className="text-[11px] text-gray-500">
-              Voice or text chat in Hindi & English
+              Voice or text chat in Hindi
             </p>
           </Link>
 
@@ -207,7 +262,7 @@ export const DashboardPage: React.FC = () => {
               {t('myFarm')}
             </h4>
             <p className="text-[11px] text-gray-500">
-              View acreage, crop stages & irrigation
+              Acreage & crop tracking
             </p>
           </Link>
 
@@ -222,7 +277,7 @@ export const DashboardPage: React.FC = () => {
               {t('diseaseLibrary')}
             </h4>
             <p className="text-[11px] text-gray-500">
-              Search 8+ crops and certified solutions
+              Encyclopedia of 20+ crops
             </p>
           </Link>
 

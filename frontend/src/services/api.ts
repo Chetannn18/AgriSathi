@@ -1,6 +1,42 @@
 import { Farm, Diagnosis, Disease, ChatMessage, WeatherData, ImageQualityResult, ExpertCase } from '../types';
+import { analyzeImageLocally, LOCAL_DISEASE_PROFILES } from './localVision';
 
 const API_BASE = 'http://localhost:8000/api';
+
+const LOCAL_STORAGE_KEY = 'agrisathi_saved_diagnoses';
+
+function saveLocalDiagnosis(diag: any) {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const list = raw ? JSON.parse(raw) : [];
+    // remove existing if same id
+    const filtered = list.filter((item: any) => item.id !== diag.id);
+    filtered.unshift(diag);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered.slice(0, 30)));
+  } catch {
+    // Ignore storage quota errors
+  }
+}
+
+function getLocalDiagnosis(id: number): Diagnosis | null {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (!raw) return null;
+    const list = JSON.parse(raw);
+    return list.find((item: any) => Number(item.id) === Number(id)) || null;
+  } catch {
+    return null;
+  }
+}
+
+function getAllLocalDiagnoses(): Diagnosis[] {
+  try {
+    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
 
 export const api = {
   // Demo Login
@@ -57,68 +93,41 @@ export const api = {
         method: 'POST',
         body: formData
       });
-      if (res.ok) return await res.json();
+      if (res.ok) {
+        const data = await res.json();
+        saveLocalDiagnosis(data);
+        return data;
+      }
     } catch {
       // Fallback for offline demo
     }
 
-    // Realistic offline demo fallback
-    return {
+    // High fidelity client-side Computer Vision analysis on uploaded image
+    const profile = await analyzeImageLocally(file, farmCrop);
+    const newId = Date.now();
+    const localResult = {
       quality_failed: false,
-      diagnosis_id: 1,
-      crop: farmCrop || 'Tomato',
-      possible_disease: 'Early Blight',
-      disease_name_hi: 'अगेती झुलसा (अर्ली ब्लाइट)',
-      confidence: 0.91,
-      severity: 'Moderate',
-      observed_symptoms: [
-        'Target-board concentric dark brown rings on lower leaves',
-        'Chlorotic yellow halo surrounding necrotic leaf spots',
-        'Early foliage curling with localized stem lesions'
-      ],
-      evidence_reason: 'Visible concentric circular brown spots on mature foliage with surrounding chlorosis characteristic of Alternaria solani pathogen.',
-      immediate_actions: [
-        'Hand-prune heavily spotted lower leaves and dispose away from the plot.',
-        'Halt overhead sprinkler watering; switch to furrow or drip to prevent splash dispersal.',
-        'Apply organic bio-fungicide (Trichoderma harzianum @ 5g/L) or approved Mancozeb 75% WP (2g/L).'
-      ],
-      immediate_actions_hi: [
-        'गंभीर रूप से प्रभावित निचली पत्तियों को तुरंत काटकर खेत से दूर नष्ट करें।',
-        'फव्वारा सिंचाई बंद करें और ड्रिप या थाला विधि अपनाएं ताकि पत्तियां सूखी रहें।',
-        'ट्राइकोडर्मा हरजिएनम (5 ग्राम/लीटर) या मैंकोजेब 75% WP (2 ग्राम/लीटर) का छिड़काव करें।'
-      ],
-      prevention: [
-        'Stake plants to keep foliage off bare ground.',
-        'Apply 2-inch organic straw mulch around plant base.',
-        'Rotate solanaceous crops with legumes or maize every season.'
-      ],
-      prevention_hi: [
-        'पौधों को डंडों से सहारा दें ताकि पत्तियां जमीन से ऊपर रहें।',
-        'पौधों के आधार पर पुआल की 2 इंच मल्चिंग करें।'
-      ],
-      monitoring: [
-        'Inspect leaf undersides every 3 days after rain or heavy morning dew.',
-        'Check neighboring tomato rows for spot expansion.'
-      ],
-      monitoring_hi: [
-        'बारिश या ओस के बाद हर 3 दिन में निचली पत्तियों की जांच करें।'
-      ],
-      differential_diagnosis: [
-        { disease: 'Early Blight', disease_hi: 'अर्ली ब्लाइट', probability: 78 },
-        { disease: 'Septoria Leaf Spot', disease_hi: 'सेप्टोरिया लीफ स्पॉट', probability: 14 },
-        { disease: 'Nutrient / Nitrogen Stress', disease_hi: 'नाइट्रोजन की कमी', probability: 8 }
-      ],
-      warnings: [
-        'Do not compost pruned infected leaves as fungal spores survive in compost.',
-        'Avoid spraying chemical fungicides during full noon sunlight.'
-      ],
-      sources: [
-        {
-          title: 'Tomato Early Blight Diagnostic Bulletin',
-          organization: 'ICAR - Indian Institute of Vegetable Research (IIVR)',
-          url: 'https://iivr.icar.gov.in/crop-protection/tomato-early-blight'
-        }
-      ],
+      diagnosis_id: newId,
+      id: newId,
+      crop: profile.crop,
+      crop_hi: profile.crop_hi,
+      possible_disease: profile.possible_disease,
+      disease_name_hi: profile.disease_name_hi,
+      confidence: profile.confidence,
+      severity: profile.severity,
+      summary: `Analysis indicates symptoms characteristic of ${profile.possible_disease}.`,
+      summary_hi: `विश्लेषण से पता चलता है कि यह ${profile.disease_name_hi || profile.possible_disease} के विशिष्ट लक्षण हैं।`,
+      observed_symptoms: profile.observed_symptoms,
+      evidence_reason: profile.evidence_reason,
+      immediate_actions: profile.immediate_actions,
+      immediate_actions_hi: profile.immediate_actions_hi,
+      prevention: profile.prevention,
+      prevention_hi: profile.prevention_hi,
+      monitoring: profile.monitoring,
+      monitoring_hi: profile.monitoring_hi,
+      differential_diagnosis: profile.differential_diagnosis,
+      warnings: profile.warnings,
+      sources: profile.sources,
       weather_context: {
         temperature: 28.5,
         humidity: 82.0,
@@ -128,21 +137,32 @@ export const api = {
       image_url: URL.createObjectURL(file),
       created_at: new Date().toISOString()
     };
+
+    saveLocalDiagnosis(localResult);
+    return localResult;
   },
 
   // Get Diagnosis Detail
   getDiagnosis: async (id: number): Promise<Diagnosis> => {
+    const localMatch = getLocalDiagnosis(id);
+    if (localMatch) return localMatch;
+
     try {
       const res = await fetch(`${API_BASE}/diagnosis/${id}`);
-      if (res.ok) return await res.json();
+      if (res.ok) {
+        const serverData = await res.json();
+        saveLocalDiagnosis(serverData);
+        return serverData;
+      }
     } catch {
       // Fallback
     }
 
-    return {
+    // Default soybean or tomato fallback if record not found
+    return localMatch || {
       id: id,
-      crop: 'Tomato',
-      possible_disease: 'Early Blight',
+      crop: 'Soybean',
+      possible_disease: 'Frogeye Leaf Spot (Cercospora sojina)',
       disease_name_hi: 'अगेती झुलसा (अर्ली ब्लाइट)',
       confidence: 0.91,
       severity: 'Moderate',
@@ -222,17 +242,24 @@ export const api = {
 
   // List Diagnoses
   getDiagnoses: async (crop?: string, disease?: string): Promise<Diagnosis[]> => {
+    let serverResults: Diagnosis[] = [];
     try {
       const params = new URLSearchParams();
       if (crop) params.append('crop', crop);
       if (disease) params.append('disease', disease);
       const res = await fetch(`${API_BASE}/diagnoses?${params.toString()}`);
-      if (res.ok) return await res.json();
+      if (res.ok) serverResults = await res.json();
     } catch {
       // Fallback
     }
 
+    const localList = getAllLocalDiagnoses();
+    if (serverResults.length > 0) {
+      return [...localList, ...serverResults];
+    }
+
     return [
+      ...localList,
       {
         id: 1,
         crop: 'Tomato',

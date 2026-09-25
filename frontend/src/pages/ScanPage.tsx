@@ -12,6 +12,7 @@ export const ScanPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
 
+  const [selectedCrop, setSelectedCrop] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isEvaluatingQuality, setIsEvaluatingQuality] = useState(false);
@@ -19,8 +20,36 @@ export const ScanPage: React.FC = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [diagnosisId, setDiagnosisId] = useState<number | null>(null);
 
-  // Preconfigured Demo Cases
+  // Preconfigured Demo Cases (Including Soybean leaf pathologies from field samples)
   const demoCases = [
+    {
+      id: 'soybean_mildew',
+      title: 'Soybean — Powdery Mildew',
+      title_hi: 'सोयाबीन — चूर्णिल आसिता (सफेद फफूंद)',
+      crop: 'Soybean',
+      img: '/assets/demo/leaf_soybean_powdery_mildew.jpg'
+    },
+    {
+      id: 'soybean_frogeye',
+      title: 'Soybean — Frogeye Leaf Spot',
+      title_hi: 'सोयाबीन — मेंढक आँख जैसा धब्बा रोग',
+      crop: 'Soybean',
+      img: '/assets/demo/leaf_soybean_frogeye_spot.jpg'
+    },
+    {
+      id: 'soybean_target',
+      title: 'Soybean — Target Spot & Blight',
+      title_hi: 'सोयाबीन — टारगेट स्पॉट / पर्ण अंगमारी',
+      crop: 'Soybean',
+      img: '/assets/demo/leaf_soybean_target_spot.jpg'
+    },
+    {
+      id: 'soybean_septoria',
+      title: 'Soybean — Septoria Brown Spot',
+      title_hi: 'सोयाबीन — सेप्टोरिया भूरा धब्बा (पीला घेरा)',
+      crop: 'Soybean',
+      img: '/assets/demo/leaf_soybean_septoria_brown_spot.jpg'
+    },
     {
       id: 'tomato',
       title: 'Tomato — Early Blight',
@@ -79,11 +108,12 @@ export const ScanPage: React.FC = () => {
   };
 
   const handleDemoCase = async (demo: typeof demoCases[0]) => {
+    setSelectedCrop(demo.crop);
     // Fetch demo image as blob to simulate file upload
     try {
       const response = await fetch(demo.img);
       const blob = await response.blob();
-      const file = new File([blob], `${demo.crop.toLowerCase()}_demo.jpg`, { type: 'image/jpeg' });
+      const file = new File([blob], `${demo.id}_sample.jpg`, { type: 'image/jpeg' });
       handleFileSelection(file);
     } catch {
       setPreviewUrl(demo.img);
@@ -105,8 +135,8 @@ export const ScanPage: React.FC = () => {
 
     setIsScanning(true);
     try {
-      const fileToSend = selectedFile || new File(["dummy"], "tomato_leaf.jpg", { type: "image/jpeg" });
-      const result = await api.diagnoseImage(fileToSend);
+      const fileToSend = selectedFile || new File(["dummy"], `${selectedCrop ? selectedCrop.toLowerCase() : 'crop'}_leaf.jpg`, { type: "image/jpeg" });
+      const result = await api.diagnoseImage(fileToSend, undefined, selectedCrop || undefined);
 
       if (result.quality_failed) {
         setQualityResult(result.quality_details);
@@ -114,7 +144,7 @@ export const ScanPage: React.FC = () => {
         return;
       }
 
-      setDiagnosisId(result.diagnosis_id || 1);
+      setDiagnosisId(result.diagnosis_id || result.id || 1);
     } catch (e) {
       console.error('Diagnosis error:', e);
       setDiagnosisId(1);
@@ -149,8 +179,45 @@ export const ScanPage: React.FC = () => {
       {isScanning && previewUrl ? (
         <ScanAnimation imageUrl={previewUrl} onComplete={onScanComplete} />
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-6">
           
+          {/* Crop Selector Bar */}
+          <div className="glass-panel p-4 rounded-2xl border border-forest-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-forest-900">
+                {language === 'hi' ? '🌱 फसल चुनें:' : '🌱 Target Crop:'}
+              </span>
+              <span className="text-[11px] text-gray-500">
+                {language === 'hi' ? '(सटीक पत्ती रोग विश्लेषण हेतु)' : '(tailors diagnosis to crop pathogen rules)'}
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {[
+                { id: '', label: language === 'hi' ? '✨ ऑटो (AI पहचान)' : '✨ Auto-Detect' },
+                { id: 'Soybean', label: language === 'hi' ? 'सोयाबीन' : 'Soybean' },
+                { id: 'Tomato', label: language === 'hi' ? 'टमाटर' : 'Tomato' },
+                { id: 'Potato', label: language === 'hi' ? 'आलू' : 'Potato' },
+                { id: 'Rice', label: language === 'hi' ? 'धान' : 'Rice' },
+                { id: 'Cotton', label: language === 'hi' ? 'कपास' : 'Cotton' },
+                { id: 'Chilli', label: language === 'hi' ? 'मिर्च' : 'Chilli' },
+                { id: 'Wheat', label: language === 'hi' ? 'गेहूं' : 'Wheat' },
+                { id: 'Maize', label: language === 'hi' ? 'मक्का' : 'Maize' },
+              ].map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => setSelectedCrop(c.id)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
+                    selectedCrop === c.id
+                      ? 'bg-forest-600 text-white shadow-sm'
+                      : 'bg-forest-50/80 text-forest-800 hover:bg-forest-100 border border-forest-200/60'
+                  }`}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Main Upload Box */}
           <div className="glass-panel p-6 sm:p-8 rounded-3xl border-2 border-dashed border-forest-200 shadow-card-soft text-center relative hover:border-forest-400 transition-colors">
             

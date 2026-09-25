@@ -254,6 +254,110 @@ def seed_database(db: Session):
             similar_diseases=["Soybean Rust", "Charcoal Rot"],
             image_url="/assets/demo/leaf_soybean.jpg",
             sources=[{"title": "ICAR-IISR Soybean Disease Advisory", "organization": "ICAR IISR", "url": "https://iisrindore.icar.gov.in"}]
+        ),
+        Disease(
+            crop="Soybean",
+            name="Powdery Mildew",
+            name_hi="चूर्णिल आसिता (पाउडरी मिल्ड्यू)",
+            pathogen_type="Fungus",
+            scientific_name="Erysiphe diffusa",
+            severity_level="Moderate",
+            symptoms=[
+                "White to grayish talcum-powder like fungal coating on upper leaf surface and veins",
+                "Leaf chlorosis, drying, and downward curling",
+                "Spread to petioles, stems, and pods in severe infections"
+            ],
+            symptoms_hi=[
+                "पत्तियों की ऊपरी सतह और नसों पर सफेद चूर्ण जैसी फफूंद",
+                "पत्तियों का पीला पड़ना और नीचे की ओर मुड़ना",
+                "तनों और फलियों पर सफेद पाउडर का फैलना"
+            ],
+            possible_causes=["Dry sunny days followed by cool humid nights"],
+            prevention=["Recommended spacing (45 x 10 cm)", "Balanced N-P-K fertilization without excess urea"],
+            prevention_hi=["उचित दूरी पर बुवाई करें", "यूरिया की अधिक मात्रा न दें"],
+            management=["Spray Wettable Sulphur 80% WP @ 3g/L or Hexaconazole 5% EC @ 1ml/L"],
+            management_hi=["घुलनशील गंधक 80% WP (3 ग्राम/लीटर) या हेक्साकोनाजोल (1 मिली/लीटर) का छिड़काव करें"],
+            similar_diseases=["Downy Mildew", "Foliar Dust"],
+            image_url="/assets/demo/leaf_soybean_powdery_mildew.jpg",
+            sources=[{"title": "ICAR-IISR Powdery Mildew Management", "organization": "ICAR IISR", "url": "https://iisrindore.icar.gov.in"}]
+        ),
+        Disease(
+            crop="Soybean",
+            name="Frogeye Leaf Spot",
+            name_hi="मेंढक आँख जैसा धब्बा रोग",
+            pathogen_type="Fungus",
+            scientific_name="Cercospora sojina",
+            severity_level="Moderate",
+            symptoms=[
+                "Circular to angular spots with tan/gray centers and dark reddish-brown to purple borders",
+                "Shot-hole appearance with center tissue dropping out",
+                "Lesion coalescence causing leaf blighting"
+            ],
+            symptoms_hi=[
+                "भूरे-लाल किनारों वाले गोल धब्बे जिनका केंद्र राख जैसा हल्का होता है",
+                "धब्बों के बीच से कागज जैसी पत्ती का झड़ना (छेद होना)",
+                "पत्तियों का झुलस कर गिरना"
+            ],
+            possible_causes=["Warm humid weather (25-30°C, RH >80%)"],
+            prevention=["Seed treatment with Carboxin + Thiram", "2-year crop rotation with maize/sorghum"],
+            prevention_hi=["कार्बोक्सिन + थीरम से बीज उपचार करें", "मक्का के साथ फसल चक्र अपनाएं"],
+            management=["Spray Pyraclostrobin 20% WG @ 1g/L or Azoxystrobin + Difenoconazole @ 1ml/L"],
+            management_hi=["पायराक्लोस्ट्रोबिन (1 ग्राम/लीटर) या एजॉक्सीस्ट्रोबिन + डाइफेनोकोनाजोल (1 मिली/लीटर) का छिड़काव करें"],
+            similar_diseases=["Septoria Brown Spot", "Target Spot"],
+            image_url="/assets/demo/leaf_soybean_frogeye_spot.jpg",
+            sources=[{"title": "ICAR-IISR Frogeye Management", "organization": "ICAR IISR", "url": "https://iisrindore.icar.gov.in"}]
+        ),
+        Disease(
+            crop="Soybean",
+            name="Target Spot & Leaf Blight",
+            name_hi="टारगेट स्पॉट एवं पर्ण अंगमारी",
+            pathogen_type="Fungus",
+            scientific_name="Corynespora cassiicola",
+            severity_level="Moderate",
+            symptoms=[
+                "Large irregular dark brown concentric circular rings resembling a target board",
+                "Chlorotic yellow halos surrounding necrotic spots with tissue perforations",
+                "Premature defoliation during prolonged rainy spells"
+            ],
+            symptoms_hi=[
+                "टारगेट बोर्ड जैसे संकेंद्री छल्लों वाले बड़े गहरे भूरे धब्बे",
+                "धब्बों के चारों ओर पीला घेरा और पत्तियों में छेद",
+                "बारिश के मौसम में पत्तियों का तेजी से झड़ना"
+            ],
+            possible_causes=["High humidity (>85%) and temperature 25-32°C"],
+            prevention=["Avoid late evening irrigation", "Deep summer ploughing"],
+            prevention_hi=["शाम की सिंचाई से बचें", "गहरी जुताई करें"],
+            management=["Spray Fluxapyroxad + Pyraclostrobin @ 120ml/acre or Carbendazim + Mancozeb @ 2.5g/L"],
+            management_hi=["फ्लक्सापायरोक्साड + पायराक्लोस्ट्रोबिन (120 मिली/एकड़) या कार्बेन्डाजिम + मैंकोजेब का छिड़काव करें"],
+            similar_diseases=["Anthracnose Blight", "Frogeye Leaf Spot"],
+            image_url="/assets/demo/leaf_soybean_target_spot.jpg",
+            sources=[{"title": "ICAR-IISR Target Spot Advisory", "organization": "ICAR IISR", "url": "https://iisrindore.icar.gov.in"}]
+        ),
+        Disease(
+            crop="Soybean",
+            name="Septoria Brown Spot",
+            name_hi="सेप्टोरिया भूरा धब्बा रोग",
+            pathogen_type="Fungus",
+            scientific_name="Septoria glycines",
+            severity_level="Moderate",
+            symptoms=[
+                "Numerous small dark brown to black specks starting on lower leaves",
+                "Prominent irregular bright yellow chlorotic halos around lesions",
+                "Upward disease spread with rain splash"
+            ],
+            symptoms_hi=[
+                "निचली पत्तियों पर छोटे काले-भूरे धब्बे",
+                "प्रत्येक धब्बे के चारों ओर स्पष्ट पीला घेरा",
+                "बारिश की छींटों से बीमारी का ऊपर की पत्तियों में फैलना"
+            ],
+            possible_causes=["Continuous wet weather and rain splashing"],
+            prevention=["Crop residue incorporation after harvest", "Rotate with non-legume crops"],
+            prevention_hi=["फसल अवशेषों को मिट्टी में दबाएं", "फसल चक्र अपनाएं"],
+            management=["Spray Mancozeb 75% WP @ 2.5g/L or Tebuconazole 10% + Sulphur 65% WG @ 2.5g/L"],
+            management_hi=["मैंकोजेब (2.5 ग्राम/लीटर) या टेबुकोनाजोल + सल्फर (2.5 ग्राम/लीटर) का छिड़काव करें"],
+            similar_diseases=["Bacterial Pustule", "Soybean Rust"],
+            image_url="/assets/demo/leaf_soybean_septoria_brown_spot.jpg",
+            sources=[{"title": "ICAR-IISR Brown Spot Guide", "organization": "ICAR IISR", "url": "https://iisrindore.icar.gov.in"}]
         )
     ]
     db.add_all(diseases)

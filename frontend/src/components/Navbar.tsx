@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Sprout, Camera, MessageSquare, CloudSun, BookOpen, Clock, ShieldCheck, Globe } from 'lucide-react';
+import { Sprout, Camera, MessageSquare, CloudSun, BookOpen, Clock, ShieldCheck, Globe, TrendingUp, Calculator } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 import { LandingNavbar } from './LandingNavbar';
 
@@ -15,8 +15,9 @@ export const Navbar: React.FC = () => {
   const navLinks = [
     { to: '/dashboard', label: t('dashboard'), icon: Sprout },
     { to: '/scan', label: t('checkCrop'), icon: Camera, highlight: true },
+    { to: '/mandi', label: language === 'hi' ? 'मंडी भाव' : 'Mandi Rates', icon: TrendingUp },
+    { to: '/calculator', label: language === 'hi' ? 'खाद कैलकुलेटर' : 'Calculator', icon: Calculator },
     { to: '/assistant', label: t('assistant'), icon: MessageSquare },
-    { to: '/farms', label: t('myFarm'), icon: Sprout },
     { to: '/history', label: t('history'), icon: Clock },
     { to: '/diseases', label: t('diseaseLibrary'), icon: BookOpen },
     { to: '/weather', label: t('weather'), icon: CloudSun },
