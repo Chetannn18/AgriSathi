@@ -163,6 +163,7 @@ const GOVT_SCHEMES = [
     benefit: '₹6,000 / year in 3 equal installments directly into farmer bank account',
     benefit_hi: '₹6,000 वार्षिक वित्तीय सहायता (प्रत्यक्ष बैंक खाते में 3 किस्तों में)',
     eligibility: 'All small & marginal landholder farmer families with cultivable land.',
+    eligibility_hi: 'सभी छोटे व सीमांत किसान परिवार जिनके पास कृषि योग्य भूमि है।',
     actionUrl: 'https://pmkisan.gov.in'
   },
   {
@@ -171,6 +172,7 @@ const GOVT_SCHEMES = [
     benefit: 'Comprehensive crop insurance against weather, drought, pests at only 2% premium',
     benefit_hi: 'प्राकृतिक आपदा, कीट व बीमारी से फसल नुकसान पर व्यापक बीमा (मात्र 1.5% - 2% प्रीमियम)',
     eligibility: 'All farmers cultivating notified crops in notified areas.',
+    eligibility_hi: 'अधिसूचित क्षेत्रों में अधिसूचित फसलें उगाने वाले सभी किसान।',
     actionUrl: 'https://pmfby.gov.in'
   },
   {
@@ -179,6 +181,7 @@ const GOVT_SCHEMES = [
     benefit: '60% government subsidy for installing standalone off-grid solar agriculture pumps',
     benefit_hi: 'खेत में सोलर सिंचाई पंप लगाने पर केंद्र व राज्य सरकार द्वारा 60% तक सब्सिडी',
     eligibility: 'Farmers, farmer groups, cooperatives with agricultural land.',
+    eligibility_hi: 'कृषि भूमि वाले किसान, कृषक उत्पादक संगठन (FPO) व सहकारी समितियां।',
     actionUrl: 'https://pmkusum.mnre.gov.in'
   },
   {
@@ -187,6 +190,7 @@ const GOVT_SCHEMES = [
     benefit: '40% to 50% subsidy on procurement of tractors, rotavators, seed drills & sprayers',
     benefit_hi: 'ट्रैक्टर, रोटावेटर, रीपर व स्प्रेयर खरीदने पर 40% से 50% तक की आर्थिक छूट',
     eligibility: 'Individual farmers, custom hiring centers, women and small farmers.',
+    eligibility_hi: 'व्यक्तिगत किसान, कस्टम हायरिंग केंद्र, महिला किसान व लघु/सीमांत किसान।',
     actionUrl: 'https://agrimachinery.nic.in'
   }
 ];
@@ -225,14 +229,14 @@ export const CalculatorPage: React.FC = () => {
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-forest-600 block flex items-center gap-1.5">
             <Calculator className="w-4 h-4 text-forest-600" />
-            <span>ICAR Scientific Dosage & Subsidy Portal</span>
+            <span>{language === 'hi' ? 'ICAR वैज्ञानिक खाद गणना व सरकारी योजनाएं' : 'ICAR Scientific Dosage & Subsidy Portal'}</span>
           </span>
           <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-0.5">
             {language === 'hi' ? 'स्मार्ट किसान कैलकुलेटर एवं योजनाएं' : 'Smart Kisan Calculator & Schemes'}
           </h1>
           <p className="text-xs sm:text-sm text-gray-600 mt-1">
             {language === 'hi'
-              ? 'जमीन के अनुसार संतुलित खाद (Urea, DAP, MOP), बीज की सही मात्रा व सरकारी योजनाओं की जानकारी'
+              ? 'जमीन के अनुसार संतुलित खाद (यूरिया, डीएपी, पोटाश), बीज की सही मात्रा व सरकारी योजनाओं की जानकारी'
               : 'Calculate exact scientific fertilizer N-P-K bags, seed quantity, application timeline, and eligible government subsidies'}
           </p>
         </div>
@@ -322,7 +326,9 @@ export const CalculatorPage: React.FC = () => {
                 </select>
               </div>
               <span className="text-[11px] text-gray-500 mt-1 block">
-                Calculated as ~{areaInAcres.toFixed(2)} standard acres
+                {language === 'hi' 
+                  ? `कुल रकबा: लगभग ~${areaInAcres.toFixed(2)} मानक एकड़` 
+                  : `Calculated as ~${areaInAcres.toFixed(2)} standard acres`}
               </span>
             </div>
 
@@ -340,7 +346,9 @@ export const CalculatorPage: React.FC = () => {
             <div className="flex items-start gap-2 text-[11px] text-gray-500">
               <Info className="w-4 h-4 text-forest-600 shrink-0 mt-0.5" />
               <span>
-                Based on ICAR All India Coordinated Research Project (AICRP) soil fertility standards.
+                {language === 'hi'
+                  ? 'भारतीय कृषि अनुसंधान परिषद (ICAR-AICRP) के मृदा उर्वरता मानकों पर आधारित।'
+                  : 'Based on ICAR All India Coordinated Research Project (AICRP) soil fertility standards.'}
               </span>
             </div>
           </div>
@@ -353,14 +361,18 @@ export const CalculatorPage: React.FC = () => {
               <div className="flex items-center justify-between border-b border-forest-100 pb-3">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-forest-600">
-                    Scientific Dosage for {area} {unit} ({cropData.name_hi})
+                    {language === 'hi'
+                      ? `${area} ${unit === 'acre' ? 'एकड़' : unit === 'bigha' ? 'बीघा' : 'हेक्टेयर'} (${cropData.name_hi}) हेतु अनुशंसित मात्रा`
+                      : `Scientific Dosage for ${area} ${unit} (${cropData.name_hi})`}
                   </span>
                   <h3 className="font-display font-extrabold text-xl text-forest-900">
                     {language === 'hi' ? 'खाद व बीज की सटीक जरूरत' : 'Total Fertilizer & Seed Requirement'}
                   </h3>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-gray-500 block">Estimated Cost</span>
+                  <span className="text-[10px] text-gray-500 block">
+                    {language === 'hi' ? 'अनुमानित लागत' : 'Estimated Cost'}
+                  </span>
                   <span className="font-extrabold text-forest-900 text-lg">
                     ₹{totalCost.toLocaleString('en-IN')}
                   </span>
@@ -465,7 +477,7 @@ export const CalculatorPage: React.FC = () => {
                       <Landmark className="w-5 h-5 text-forest-600" />
                     </div>
                     <span className="text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                      Direct Subsidy
+                      {language === 'hi' ? 'प्रत्यक्ष सरकारी सब्सिडी' : 'Direct Subsidy'}
                     </span>
                   </div>
 
@@ -474,22 +486,28 @@ export const CalculatorPage: React.FC = () => {
                   </h3>
 
                   <div className="bg-forest-50/80 p-3 rounded-xl border border-forest-100 my-3 text-xs">
-                    <span className="font-bold text-forest-800 block mb-0.5">लाभ (Benefit):</span>
+                    <span className="font-bold text-forest-800 block mb-0.5">
+                      {language === 'hi' ? 'लाभ (Financial Benefit):' : 'Benefit:'}
+                    </span>
                     <p className="text-forest-900 font-semibold leading-relaxed">
                       {language === 'hi' ? scheme.benefit_hi : scheme.benefit}
                     </p>
                   </div>
 
                   <div className="text-xs text-gray-600 space-y-1">
-                    <span className="font-bold text-gray-700 block">पात्रता (Eligibility):</span>
+                    <span className="font-bold text-gray-700 block">
+                      {language === 'hi' ? 'पात्रता (Eligibility):' : 'Eligibility:'}
+                    </span>
                     <p className="text-[11px] leading-relaxed">
-                      {scheme.eligibility}
+                      {language === 'hi' ? scheme.eligibility_hi : scheme.eligibility}
                     </p>
                   </div>
                 </div>
 
                 <div className="mt-5 pt-3 border-t border-forest-100 flex items-center justify-between">
-                  <span className="text-[10px] text-gray-400">Official Portal</span>
+                  <span className="text-[10px] text-gray-400">
+                    {language === 'hi' ? 'आधिकारिक पोर्टल' : 'Official Portal'}
+                  </span>
                   <a
                     href={scheme.actionUrl}
                     target="_blank"

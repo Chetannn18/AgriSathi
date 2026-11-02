@@ -77,6 +77,8 @@ export const MacroLeafScanner: React.FC = () => {
               <img
                 src="/assets/landing/macro_crop_leaf.jpg"
                 alt="Agricultural leaf under computer vision inspection"
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
 
@@ -84,7 +86,7 @@ export const MacroLeafScanner: React.FC = () => {
               {isScanning && <div className="animate-scan-line" />}
 
               {/* Computer Vision Overlay Matrix */}
-              <div className="absolute inset-0 bg-forest-950/20 backdrop-contrast-105 pointer-events-none" />
+              <div className="absolute inset-0 bg-forest-950/20 pointer-events-none" />
 
               {/* CV Bounding Boxes around hotspots */}
               {hotspots.map((spot) => (

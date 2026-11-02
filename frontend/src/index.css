@@ -23,27 +23,27 @@
   font-family: 'Newsreader', Georgia, serif;
 }
 
-/* Custom Glassmorphic Card styles */
+/* Custom Glassmorphic Card styles (Optimized for smooth 60fps) */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(226, 232, 240, 0.85);
   box-shadow: 0 10px 30px -5px rgba(27, 67, 50, 0.06);
 }
 
 .glass-panel-dark {
-  background: rgba(8, 28, 21, 0.82);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgba(8, 28, 21, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(82, 183, 136, 0.22);
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
 }
 
 .glass-hud {
-  background: rgba(4, 13, 10, 0.65);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(4, 13, 10, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(116, 198, 157, 0.35);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 0 20px 0 rgba(82, 183, 136, 0.08);
 }
@@ -95,16 +95,17 @@
 .wave-bar:nth-child(7) { animation-delay: 0.5s; }
 .wave-bar:nth-child(8) { animation-delay: 0.35s; }
 
-/* Subtle wind drift animation */
+/* Subtle wind drift animation (Hardware-accelerated) */
 @keyframes windDrift {
   0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translate3d(0, 0, 0) scale(1.02);
   }
   50% {
-    transform: translate(12px, -8px) rotate(1.5deg);
+    transform: translate3d(8px, -6px, 0) scale(1.04);
   }
 }
 
 .animate-wind-drift {
-  animation: windDrift 8s ease-in-out infinite;
+  animation: windDrift 10s ease-in-out infinite;
+  will-change: transform;
 }

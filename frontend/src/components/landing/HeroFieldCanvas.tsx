@@ -6,25 +6,46 @@ export const HeroFieldCanvas: React.FC = () => {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
     let animationFrameId: number;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
+    let isVisible = true;
 
     // Check prefers-reduced-motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Precomputed sun gradient
+    let sunGradient: CanvasGradient | null = null;
+    const updateSunGradient = () => {
+      sunGradient = ctx.createRadialGradient(
+        width * 0.52, height * 0.18, 10,
+        width * 0.52, height * 0.18, width * 0.65
+      );
+      sunGradient.addColorStop(0, 'rgba(253, 224, 71, 0.12)');
+      sunGradient.addColorStop(0.35, 'rgba(163, 230, 53, 0.05)');
+      sunGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    };
+    updateSunGradient();
 
     const handleResize = () => {
       if (!canvas) return;
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+      updateSunGradient();
     };
-    window.addEventListener('resize', handleResize);
 
-    // Particle pool for floating pollen, dew shimmer, and light motes
-    const particleCount = window.innerWidth < 768 ? 24 : 60;
+    let resizeTimeout: any;
+    const debouncedResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(handleResize, 150);
+    };
+    window.addEventListener('resize', debouncedResize);
+
+    // Optimized particle pool (16 on mobile, 26 on desktop)
+    const particleCount = window.innerWidth < 768 ? 14 : 24;
     interface Particle {
       x: number;
       y: number;
@@ -32,7 +53,6 @@ export const HeroFieldCanvas: React.FC = () => {
       speedX: number;
       speedY: number;
       opacity: number;
-      pulseSpeed: number;
       color: string;
     }
 
@@ -46,37 +66,31 @@ export const HeroFieldCanvas: React.FC = () => {
     const particles: Particle[] = Array.from({ length: particleCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: Math.random() * 2.2 + 0.8,
-      speedX: (Math.random() - 0.2) * 0.4,
-      speedY: -Math.random() * 0.5 - 0.1,
-      opacity: Math.random() * 0.6 + 0.2,
-      pulseSpeed: Math.random() * 0.02 + 0.005,
+      size: Math.random() * 1.8 + 0.8,
+      speedX: (Math.random() - 0.2) * 0.35,
+      speedY: -Math.random() * 0.4 - 0.1,
+      opacity: Math.random() * 0.5 + 0.2,
       color: colors[Math.floor(Math.random() * colors.length)]
     }));
 
     let tick = 0;
 
     const render = () => {
+      if (!isVisible) return; // Do not render if scrolled away
+
       tick += 0.015;
       ctx.clearRect(0, 0, width, height);
 
-      // Soft sunray gradient from top-center
-      const sunGradient = ctx.createRadialGradient(
-        width * 0.52, height * 0.18, 10,
-        width * 0.52, height * 0.18, width * 0.65
-      );
-      sunGradient.addColorStop(0, 'rgba(253, 224, 71, 0.14)');
-      sunGradient.addColorStop(0.35, 'rgba(163, 230, 53, 0.06)');
-      sunGradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
-      ctx.fillStyle = sunGradient;
-      ctx.fillRect(0, 0, width, height);
+      if (sunGradient) {
+        ctx.fillStyle = sunGradient;
+        ctx.fillRect(0, 0, width, height);
+      }
 
       if (!prefersReducedMotion) {
-        // Draw floating natural particles
+        // Fast, hardware-accelerated particle drawing without CPU shadowBlur
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
-          p.x += p.speedX + Math.sin(tick + i) * 0.25;
+          p.x += p.speedX + Math.sin(tick + i) * 0.2;
           p.y += p.speedY;
 
           if (p.y < -10) {
@@ -86,12 +100,10 @@ export const HeroFieldCanvas: React.FC = () => {
           if (p.x < -10) p.x = width + 10;
           if (p.x > width + 10) p.x = -10;
 
-          const currentOpacity = Math.max(0.1, p.opacity + Math.sin(tick * 2 + i) * 0.2);
+          const currentOpacity = Math.max(0.1, p.opacity + Math.sin(tick * 2 + i) * 0.18);
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
           ctx.fillStyle = `${p.color}${currentOpacity})`;
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = 'rgba(116, 198, 157, 0.5)';
           ctx.fill();
         }
       }
@@ -99,10 +111,23 @@ export const HeroFieldCanvas: React.FC = () => {
       animationFrameId = requestAnimationFrame(render);
     };
 
+    // Pause animation when hero is offscreen
+    const observer = new IntersectionObserver(([entry]) => {
+      const wasVisible = isVisible;
+      isVisible = entry.isIntersecting;
+      if (!wasVisible && isVisible) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(render);
+      }
+    }, { threshold: 0.05 });
+
+    observer.observe(canvas);
     render();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      observer.disconnect();
+      clearTimeout(resizeTimeout);
+      window.removeEventListener('resize', debouncedResize);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

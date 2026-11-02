@@ -4,7 +4,7 @@ import {
   CheckCircle2, AlertTriangle, ShieldCheck, ArrowLeft, ExternalLink,
   ThumbsUp, ThumbsDown, BookOpen, Clock, Activity, Send
 } from 'lucide-react';
-import { api } from '../services/api';
+import { api, formatImageUrl } from '../services/api';
 import { Diagnosis } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { ConfidenceBadge } from '../components/ConfidenceBadge';
@@ -12,7 +12,7 @@ import { SeverityBadge } from '../components/SeverityBadge';
 
 export const DiagnosisDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { t, language } = useLanguage();
+  const { t, language, getCropName } = useLanguage();
   const [diagnosis, setDiagnosis] = useState<Diagnosis | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [expertRequested, setExpertRequested] = useState(false);
@@ -83,7 +83,9 @@ export const DiagnosisDetailPage: React.FC = () => {
           <span>{t('history')}</span>
         </Link>
         <span className="text-xs text-gray-500">
-          Diagnosis ID #{diagnosis.id} • {new Date(diagnosis.created_at).toLocaleDateString()}
+          {language === 'hi'
+            ? `निदान आईडी #${diagnosis.id} • ${new Date(diagnosis.created_at).toLocaleDateString('hi-IN')}`
+            : `Diagnosis ID #${diagnosis.id} • ${new Date(diagnosis.created_at).toLocaleDateString()}`}
         </span>
       </div>
 
@@ -95,12 +97,17 @@ export const DiagnosisDetailPage: React.FC = () => {
           <div className="md:col-span-4">
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-forest-950 border border-forest-200 shadow-md">
               <img
-                src={diagnosis.image_url || '/assets/demo/leaf_tomato.jpg'}
+                src={formatImageUrl(diagnosis.image_url) || '/assets/demo/leaf_tomato.jpg'}
                 alt={diagnosis.possible_disease}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = '/assets/demo/leaf_tomato.jpg';
+                }}
               />
               <div className="absolute top-2.5 left-2.5 bg-forest-950/80 backdrop-blur-xs text-leaf-light px-2.5 py-0.5 rounded text-[11px] font-mono">
-                {diagnosis.crop}
+                {language === 'hi' 
+                  ? (getCropName ? getCropName(diagnosis.crop) : diagnosis.crop_hi || diagnosis.crop)
+                  : diagnosis.crop}
               </div>
             </div>
           </div>
@@ -112,12 +119,18 @@ export const DiagnosisDetailPage: React.FC = () => {
                 {t('possibleDisease')}
               </span>
               <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-0.5">
-                {diagnosis.possible_disease}
+                {language === 'hi' && diagnosis.disease_name_hi ? diagnosis.disease_name_hi : diagnosis.possible_disease}
               </h1>
-              {diagnosis.disease_name_hi && (
+              {language === 'hi' ? (
                 <p className="text-sm font-semibold text-forest-700 mt-0.5">
-                  {diagnosis.disease_name_hi}
+                  {diagnosis.possible_disease}
                 </p>
+              ) : (
+                diagnosis.disease_name_hi && (
+                  <p className="text-sm font-semibold text-forest-700 mt-0.5">
+                    {diagnosis.disease_name_hi}
+                  </p>
+                )
               )}
             </div>
 
@@ -128,7 +141,7 @@ export const DiagnosisDetailPage: React.FC = () => {
               {diagnosis.expert_status === 'reviewed' && (
                 <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  KVK Agronomist Verified
+                  {t('kvkVerified')}
                 </span>
               )}
             </div>
@@ -139,7 +152,7 @@ export const DiagnosisDetailPage: React.FC = () => {
                 {t('whyWeThinkThis')}
               </span>
               <p className="text-xs text-forest-800 leading-relaxed">
-                {diagnosis.evidence_reason || "Concentric circular leaf lesions identified on mature foliage with surrounding chlorotic halo."}
+                {diagnosis.evidence_reason || (language === 'hi' ? 'पत्ती की सतह पर रोग के स्पष्ट लक्षण व छल्लेदार धब्बे पाए गए हैं।' : 'Concentric circular leaf lesions identified on mature foliage with surrounding chlorotic halo.')}
               </p>
             </div>
           </div>
@@ -201,7 +214,7 @@ export const DiagnosisDetailPage: React.FC = () => {
           </h3>
         </div>
         <p className="text-xs text-forest-200">
-          Immediate field interventions approved by ICAR and state agricultural extension guidelines:
+          {t('immediateAdvisorySubtext')}
         </p>
 
         <div className="space-y-3 pt-1">
@@ -259,7 +272,7 @@ export const DiagnosisDetailPage: React.FC = () => {
           <div className="flex items-center gap-2 mb-2">
             <ShieldCheck className="w-5 h-5 text-emerald-700" />
             <h4 className="font-bold text-sm text-emerald-950">
-              Certified Agronomist Review
+              {language === 'hi' ? 'सत्यापित कृषि वैज्ञानिक समीक्षा' : 'Certified Agronomist Review'}
             </h4>
           </div>
           {diagnosis.expert_reviews.map((rev, idx) => (
@@ -272,7 +285,7 @@ export const DiagnosisDetailPage: React.FC = () => {
               </p>
               {rev.prescription && (
                 <p className="text-[11px] text-emerald-800 font-semibold pt-1">
-                  Prescription: {rev.prescription}
+                  {language === 'hi' ? 'अनुशंसित उपचार: ' : 'Prescription: '} {rev.prescription}
                 </p>
               )}
             </div>
@@ -346,7 +359,7 @@ export const DiagnosisDetailPage: React.FC = () => {
           </span>
           {feedbackSent ? (
             <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
-              ✓ Recorded
+              ✓ {t('recorded')}
             </span>
           ) : (
             <div className="flex items-center gap-1.5">

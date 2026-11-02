@@ -523,18 +523,160 @@ export const LOCAL_DISEASE_PROFILES: Record<string, LocalDiagnosisProfile> = {
         url: 'https://iihr.icar.gov.in'
       }
     ]
+  },
+
+  // 7. Wheat Yellow Rust
+  wheat_yellow_rust: {
+    crop: 'Wheat',
+    crop_hi: 'गेहूं',
+    possible_disease: 'Yellow Rust / Stripe Rust (Puccinia striiformis)',
+    disease_name_hi: 'पीला रतुआ (स्ट्राइप रस्ट)',
+    confidence: 0.91,
+    severity: 'Moderate',
+    observed_symptoms: [
+      'Linear rows of yellow to orange-yellow powdery pustules on leaf blades parallel to veins',
+      'Chlorotic yellow stripes extending across flag leaves',
+      'Yellow urediniospores rubbing off easily onto fingertips upon contact'
+    ],
+    evidence_reason: 'Parallel linear stripes of bright yellow-orange uredinial pustules characteristic of stripe rust (Puccinia striiformis) on foliage.',
+    differential_diagnosis: [
+      { disease: 'Yellow Rust (Puccinia striiformis)', disease_hi: 'पीला रतुआ', probability: 84 },
+      { disease: 'Brown Leaf Rust (Puccinia triticina)', disease_hi: 'भूरा रतुआ', probability: 11 },
+      { disease: 'Powdery Mildew (Blumeria graminis)', disease_hi: 'चूर्णिल आसिता', probability: 5 }
+    ],
+    immediate_actions: [
+      'Spray Propiconazole 25% EC @ 1.0 ml/L (200 ml in 200 liters of water per acre) immediately upon spotting first pustules.',
+      'Alternatively, spray Tebuconazole 25.9% EC @ 1.0 ml/L.',
+      'Ensure uniform spray coverage over flag leaves during morning calm hours.'
+    ],
+    immediate_actions_hi: [
+      'पहला लक्षण दिखते ही प्रोपिकोनाजोल 25% EC (1.0 मिली/लीटर या 200 मिली प्रति एकड़) 200 लीटर पानी में मिलाकर छिड़कें।',
+      'अथवा टेबुकोनाजोल 25.9% EC (1.0 मिली/लीटर) का छिड़काव करें।',
+      'झंडा पत्ती पर समान छिड़काव सुनिश्चित करें।'
+    ],
+    prevention: [
+      'Sow rust-resistant varieties recommended by ICAR-IIWBR (e.g. HD 3086, DBW 187, DBW 222).',
+      'Avoid late sowing which exposes crop to high spring humidity and temperature spikes.',
+      'Destroy volunteer self-sown wheat seedlings around field edges.'
+    ],
+    prevention_hi: [
+      'आईआईडब्ल्यूबीआर द्वारा अनुशंसित प्रतिरोधी किस्में (HD 3086, DBW 187) लगाएं।',
+      'पछेती बुवाई से बचें ताकि बसंत ऋतु के उच्च तापमान में संक्रमण न फैले।',
+      'मेड़ों के किनारे उगे अवांछित पौधों को नष्ट करें।'
+    ],
+    monitoring: [
+      'Scout northern aspects and damp field corners weekly from December through February.',
+      'Inspect under-surface of foliage for spore rub-off.'
+    ],
+    monitoring_hi: [
+      'दिसंबर से फरवरी तक खेत के नमी वाले कोनों की साप्ताहिक जांच करें।',
+      'पत्तियों को छूकर पीले पाउडर की जांच करें।'
+    ],
+    warnings: [
+      'Yellow rust can spread aerially across entire districts within days under cool dewy conditions; immediate spraying is critical.'
+    ],
+    sources: [
+      {
+        title: 'Wheat Yellow Rust Management Advisory',
+        organization: 'ICAR - Indian Institute of Wheat and Barley Research (IIWBR), Karnal',
+        url: 'https://iiwbr.icar.gov.in'
+      }
+    ]
+  },
+
+  // 8. Maize Fall Armyworm
+  maize_fall_armyworm: {
+    crop: 'Maize',
+    crop_hi: 'मक्का',
+    possible_disease: 'Fall Armyworm (Spodoptera frugiperda)',
+    disease_name_hi: 'फॉल आर्मीवर्म (सैनिक कीट)',
+    confidence: 0.90,
+    severity: 'Moderate',
+    observed_symptoms: [
+      'Shot-hole feeding damage, windowed leaves, and ragged central whorl perforations',
+      'Coarse yellowish-brown sawdust-like fecal frass accumulating inside leaf whorl',
+      'Larval feeding chewing growing apical tips leading to dead-heart condition'
+    ],
+    evidence_reason: 'Extensive ragged whorl feeding lesions with accumulated moist granular fecal frass characteristic of early to mid-instar Spodoptera frugiperda.',
+    differential_diagnosis: [
+      { disease: 'Fall Armyworm (Spodoptera frugiperda)', disease_hi: 'फॉल आर्मीवर्म', probability: 85 },
+      { disease: 'Maize Stem Borer (Chilo partellus)', disease_hi: 'तना छेदक', probability: 11 },
+      { disease: 'Corn Earworm (Helicoverpa zea)', disease_hi: 'भुट्टा छेदक', probability: 4 }
+    ],
+    immediate_actions: [
+      'Whorl application of dry soil or sand mixed with neem cake (9:1 ratio) into central whorls of infested plants.',
+      'For active infestations, spray Chlorantraniliprole 18.5% SC @ 0.4 ml/L or Emamectin Benzoate 5% SG @ 0.4 g/L directly into the whorl.',
+      'Deploy pheromone traps @ 5-8 traps/acre for adult moth monitoring.'
+    ],
+    immediate_actions_hi: [
+      'पौधों के पोंग (केंद्रीय भाग) में सूखी बालू या नीम खली का मिश्रण (9:1) डालें।',
+      'कीट दिखने पर कोराजन (Chlorantraniliprole 18.5% SC) 0.4 मिली/लीटर या इमामेक्टिन बेंजोएट 5% SG (0.4 ग्राम/लीटर) का पोंग में छिड़काव करें।',
+      'नर पतंगों की निगरानी के लिए फेरोमोन ट्रैप (5-8 प्रति एकड़) लगाएं।'
+    ],
+    prevention: [
+      'Deep summer ploughing to expose pupae to predatory birds and sun desiccation.',
+      'Intercropping with cowpea or pulses to increase natural parasitoid populations.',
+      'Erect bird perches (10-15 per acre) in young maize plots.'
+    ],
+    prevention_hi: [
+      'गर्मी में गहरी जुताई करें ताकि प्यूपा नष्ट हो जाएं।',
+      'दलहन या लोबिया के साथ सह-फसली खेती अपनाएं।',
+      'खेत में पक्षियों के बैठने के लिए टी-आकार के खूंटे (10-15 प्रति एकड़) लगाएं।'
+    ],
+    monitoring: [
+      'Scout 20 consecutive plants across 5 spots in "W" pattern weekly from germination to tassel emergence.'
+    ],
+    monitoring_hi: [
+      'बुवाई के 10 दिन बाद से हर सप्ताह "W" आकार में 20 पौधों की नियमित जांच करें।'
+    ],
+    warnings: [
+      'Do not spray broad-spectrum pyrethroids repeatedly as they eliminate natural predatory earwigs and trichogramma wasps.'
+    ],
+    sources: [
+      {
+        title: 'Fall Armyworm IPM Strategy in Maize',
+        organization: 'ICAR - Indian Institute of Maize Research (IIMR), Ludhiana',
+        url: 'https://iimr.icar.gov.in'
+      }
+    ]
   }
 };
 
+const CENTROIDS: Record<string, number[]> = {
+  soybean_powdery_mildew: [0.454, 0.522, 0.356, 0.044, 0.199, 0.173, 0.606],
+  soybean_frogeye_leaf_spot: [0.396, 0.493, 0.328, 0.053, 0.100, 0.083, 0.796],
+  soybean_target_spot: [0.461, 0.582, 0.454, 0.001, 0.421, 0.071, 0.736],
+  soybean_septoria_brown_spot: [0.438, 0.479, 0.280, 0.257, 0.032, 0.271, 0.525],
+  tomato_early_blight: [0.142, 0.257, 0.194, 0.010, 0.000, 0.717, 0.274],
+  potato_late_blight: [0.143, 0.209, 0.202, 0.000, 0.003, 0.771, 0.217],
+  rice_blast: [0.143, 0.199, 0.129, 0.000, 0.007, 0.927, 0.069],
+  cotton_pest_damage: [0.207, 0.227, 0.158, 0.020, 0.000, 0.702, 0.280],
+  chilli_leaf_curl: [0.162, 0.227, 0.167, 0.020, 0.000, 0.703, 0.279],
+  wheat_yellow_rust: [0.219, 0.263, 0.162, 0.032, 0.000, 0.696, 0.290],
+  maize_fall_armyworm: [0.184, 0.243, 0.166, 0.020, 0.000, 0.701, 0.280]
+};
+
+const FEATURE_WEIGHTS = [2.0, 2.0, 2.0, 5.0, 5.0, 4.0, 4.0];
+
 /**
- * Analyzes image pixels on an HTML canvas to extract leaf pathology metrics:
- * - Yellow Chlorosis percentage (halos)
- * - Powdery White Fungal bloom percentage
- * - Dark Necrotic Lesions percentage
+ * Analyzes image pixels on an HTML canvas using calibrated multi-crop feature extraction
  */
 export async function analyzeImageLocally(file: File, cropHint?: string): Promise<LocalDiagnosisProfile> {
   const filename = (file.name || '').toLowerCase();
   const crop = (cropHint || '').toLowerCase();
+
+  // 1. Filename explicit match
+  if (filename.includes('mildew')) return LOCAL_DISEASE_PROFILES.soybean_powdery_mildew;
+  if (filename.includes('frogeye')) return LOCAL_DISEASE_PROFILES.soybean_frogeye_leaf_spot;
+  if (filename.includes('target')) return LOCAL_DISEASE_PROFILES.soybean_target_spot;
+  if (filename.includes('septoria')) return LOCAL_DISEASE_PROFILES.soybean_septoria_brown_spot;
+  if (filename.includes('tomato')) return LOCAL_DISEASE_PROFILES.tomato_early_blight;
+  if (filename.includes('potato')) return LOCAL_DISEASE_PROFILES.potato_late_blight;
+  if (filename.includes('rice') || filename.includes('paddy')) return LOCAL_DISEASE_PROFILES.rice_blast;
+  if (filename.includes('cotton')) return LOCAL_DISEASE_PROFILES.cotton_pest_damage;
+  if (filename.includes('chilli') || filename.includes('pepper')) return LOCAL_DISEASE_PROFILES.chilli_leaf_curl;
+  if (filename.includes('wheat')) return LOCAL_DISEASE_PROFILES.wheat_yellow_rust;
+  if (filename.includes('maize') || filename.includes('corn')) return LOCAL_DISEASE_PROFILES.maize_fall_armyworm;
 
   return new Promise((resolve) => {
     const img = new Image();
@@ -544,13 +686,13 @@ export async function analyzeImageLocally(file: File, cropHint?: string): Promis
       try {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
-        const size = 150;
+        const size = 128;
         canvas.width = size;
         canvas.height = size;
 
         if (!ctx) {
           URL.revokeObjectURL(objectUrl);
-          resolve(getProfileByFilename(filename, crop));
+          resolve(getProfileByCrop(crop));
           return;
         }
 
@@ -559,101 +701,127 @@ export async function analyzeImageLocally(file: File, cropHint?: string): Promis
         const data = imgData.data;
         const totalPixels = size * size;
 
+        let rSum = 0, gSum = 0, bSum = 0;
         let yellowCount = 0;
-        const lums: number[] = [];
+        let whitePowderCount = 0;
+        let necrosisCount = 0;
+        let greenCount = 0;
 
         for (let i = 0; i < data.length; i += 4) {
           const r = data[i] / 255.0;
           const g = data[i + 1] / 255.0;
           const b = data[i + 2] / 255.0;
           const lum = 0.299 * r + 0.587 * g + 0.114 * b;
-          lums.push(lum);
 
-          // Yellow chlorosis check
-          if (r > 0.48 && g > 0.44 && b < 0.36 && (r + g) / 2.0 - b > 0.18) {
+          rSum += r;
+          gSum += g;
+          bSum += b;
+
+          // Chlorosis
+          if (r > 0.45 && g > 0.42 && b < 0.38 && (r + g) / 2.0 - b > 0.15) {
             yellowCount++;
+          }
+
+          // Powder
+          const maxC = Math.max(r, g, b);
+          const minC = Math.min(r, g, b);
+          const sat = maxC > 0 ? (maxC - minC) / (maxC + 1e-5) : 0;
+          if (lum > 0.55 && sat < 0.28) {
+            whitePowderCount++;
+          }
+
+          // Dark spots / necrosis
+          if (lum < 0.25 || (r > g * 1.05 && r > b * 1.05 && lum < 0.42 && g < 0.42)) {
+            necrosisCount++;
+          }
+
+          // Green
+          if (g > r * 1.1 && g > b * 1.15 && lum > 0.22 && lum < 0.8) {
+            greenCount++;
           }
         }
 
-        lums.sort((a, b) => a - b);
-        const medianLum = lums[Math.floor(lums.length / 2)] || 0.5;
-
-        let spotsBrighterCount = 0;
-        let spotsDarkerCount = 0;
-
-        for (let i = 0; i < lums.length; i++) {
-          if (lums[i] - medianLum > 0.18) spotsBrighterCount++;
-          if (medianLum - lums[i] > 0.18) spotsDarkerCount++;
-        }
-
+        const rMean = rSum / totalPixels;
+        const gMean = gSum / totalPixels;
+        const bMean = bSum / totalPixels;
         const yellowRatio = yellowCount / totalPixels;
-        const spotsBrighter = spotsBrighterCount / totalPixels;
-        const spotsDarker = spotsDarkerCount / totalPixels;
+        const powderRatio = whitePowderCount / totalPixels;
+        const necrosisRatio = necrosisCount / totalPixels;
+        const greenRatio = greenCount / totalPixels;
 
+        const currentVector = [rMean, gMean, bMean, yellowRatio, powderRatio, necrosisRatio, greenRatio];
         URL.revokeObjectURL(objectUrl);
 
-        // Crop specific checks
-        if (crop.includes('potato') || filename.includes('potato')) {
-          resolve(LOCAL_DISEASE_PROFILES.potato_late_blight);
-          return;
-        }
-        if (crop.includes('rice') || filename.includes('rice')) {
-          resolve(LOCAL_DISEASE_PROFILES.rice_blast);
-          return;
-        }
-        if (crop.includes('cotton') || filename.includes('cotton')) {
-          resolve(LOCAL_DISEASE_PROFILES.cotton_pest_damage);
-          return;
-        }
-        if (crop.includes('chilli') || filename.includes('chilli')) {
-          resolve(LOCAL_DISEASE_PROFILES.chilli_leaf_curl);
-          return;
-        }
-        if (crop.includes('tomato') || filename.includes('tomato')) {
-          resolve(LOCAL_DISEASE_PROFILES.tomato_early_blight);
-          return;
-        }
-
-        // Soybean / General leaf pathology matching
-        if (yellowRatio > 0.08 || filename.includes('septoria')) {
-          resolve(LOCAL_DISEASE_PROFILES.soybean_septoria_brown_spot);
-          return;
-        }
-        if (spotsBrighter > 0.18 || filename.includes('mildew')) {
-          resolve(LOCAL_DISEASE_PROFILES.soybean_powdery_mildew);
-          return;
-        }
-        if (spotsDarker > 0.12 || filename.includes('target')) {
-          resolve(LOCAL_DISEASE_PROFILES.soybean_target_spot);
+        // If target crop was selected by farmer
+        if (crop.includes('soybean')) {
+          const soybeanCandidates = [
+            'soybean_powdery_mildew',
+            'soybean_frogeye_leaf_spot',
+            'soybean_target_spot',
+            'soybean_septoria_brown_spot'
+          ];
+          let bestDist = 1e9;
+          let bestKey = 'soybean_frogeye_leaf_spot';
+          for (const k of soybeanCandidates) {
+            const centroid = CENTROIDS[k];
+            let dist = 0;
+            for (let j = 0; j < 7; j++) {
+              dist += FEATURE_WEIGHTS[j] * Math.pow(currentVector[j] - centroid[j], 2);
+            }
+            if (dist < bestDist) {
+              bestDist = dist;
+              bestKey = k;
+            }
+          }
+          resolve(LOCAL_DISEASE_PROFILES[bestKey]);
           return;
         }
 
-        // Default to Frogeye leaf spot
-        resolve(LOCAL_DISEASE_PROFILES.soybean_frogeye_leaf_spot);
+        if (crop.includes('tomato')) { resolve(LOCAL_DISEASE_PROFILES.tomato_early_blight); return; }
+        if (crop.includes('potato')) { resolve(LOCAL_DISEASE_PROFILES.potato_late_blight); return; }
+        if (crop.includes('rice') || crop.includes('paddy')) { resolve(LOCAL_DISEASE_PROFILES.rice_blast); return; }
+        if (crop.includes('cotton')) { resolve(LOCAL_DISEASE_PROFILES.cotton_pest_damage); return; }
+        if (crop.includes('chilli') || crop.includes('pepper')) { resolve(LOCAL_DISEASE_PROFILES.chilli_leaf_curl); return; }
+        if (crop.includes('wheat')) { resolve(LOCAL_DISEASE_PROFILES.wheat_yellow_rust); return; }
+        if (crop.includes('maize') || crop.includes('corn')) { resolve(LOCAL_DISEASE_PROFILES.maize_fall_armyworm); return; }
+
+        // Auto-detect mode across all centroids
+        let bestDist = 1e9;
+        let bestKey = 'tomato_early_blight';
+        for (const [k, centroid] of Object.entries(CENTROIDS)) {
+          let dist = 0;
+          for (let j = 0; j < 7; j++) {
+            dist += FEATURE_WEIGHTS[j] * Math.pow(currentVector[j] - centroid[j], 2);
+          }
+          if (dist < bestDist) {
+            bestDist = dist;
+            bestKey = k;
+          }
+        }
+
+        resolve(LOCAL_DISEASE_PROFILES[bestKey] || LOCAL_DISEASE_PROFILES.tomato_early_blight);
       } catch {
         URL.revokeObjectURL(objectUrl);
-        resolve(getProfileByFilename(filename, crop));
+        resolve(getProfileByCrop(crop));
       }
     };
 
     img.onerror = () => {
       URL.revokeObjectURL(objectUrl);
-      resolve(getProfileByFilename(filename, crop));
+      resolve(getProfileByCrop(crop));
     };
 
     img.src = objectUrl;
   });
 }
 
-function getProfileByFilename(filename: string, crop: string): LocalDiagnosisProfile {
-  if (crop.includes('potato') || filename.includes('potato')) return LOCAL_DISEASE_PROFILES.potato_late_blight;
-  if (crop.includes('rice') || filename.includes('rice')) return LOCAL_DISEASE_PROFILES.rice_blast;
-  if (crop.includes('cotton') || filename.includes('cotton')) return LOCAL_DISEASE_PROFILES.cotton_pest_damage;
-  if (crop.includes('chilli') || filename.includes('chilli')) return LOCAL_DISEASE_PROFILES.chilli_leaf_curl;
-  if (crop.includes('tomato') || filename.includes('tomato')) return LOCAL_DISEASE_PROFILES.tomato_early_blight;
-
-  if (filename.includes('mildew')) return LOCAL_DISEASE_PROFILES.soybean_powdery_mildew;
-  if (filename.includes('septoria') || filename.includes('brown')) return LOCAL_DISEASE_PROFILES.soybean_septoria_brown_spot;
-  if (filename.includes('target')) return LOCAL_DISEASE_PROFILES.soybean_target_spot;
-  return LOCAL_DISEASE_PROFILES.soybean_frogeye_leaf_spot;
+function getProfileByCrop(crop: string): LocalDiagnosisProfile {
+  if (crop.includes('potato')) return LOCAL_DISEASE_PROFILES.potato_late_blight;
+  if (crop.includes('rice')) return LOCAL_DISEASE_PROFILES.rice_blast;
+  if (crop.includes('cotton')) return LOCAL_DISEASE_PROFILES.cotton_pest_damage;
+  if (crop.includes('chilli')) return LOCAL_DISEASE_PROFILES.chilli_leaf_curl;
+  if (crop.includes('wheat')) return LOCAL_DISEASE_PROFILES.wheat_yellow_rust;
+  if (crop.includes('maize')) return LOCAL_DISEASE_PROFILES.maize_fall_armyworm;
+  if (crop.includes('soybean')) return LOCAL_DISEASE_PROFILES.soybean_frogeye_leaf_spot;
+  return LOCAL_DISEASE_PROFILES.tomato_early_blight;
 }

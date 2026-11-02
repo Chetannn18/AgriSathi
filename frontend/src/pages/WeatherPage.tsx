@@ -38,13 +38,15 @@ export const WeatherPage: React.FC = () => {
       {/* Header */}
       <div>
         <span className="text-xs font-bold uppercase tracking-wider text-forest-600 block">
-          Agromet Climate & Pathogen Correlation
+          {language === 'hi' ? 'मौसम एवं रोग जोखिम विश्लेषण' : 'Agromet Climate & Pathogen Correlation'}
         </span>
         <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-1">
           {t('weather')}
         </h1>
         <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
-          Real-time agricultural weather context from IMD Agromet indices to anticipate fungal and pest outbreaks
+          {language === 'hi'
+            ? 'आईएमडी (IMD) मौसम पूर्वानुमान व फंगल-कीट प्रकोप से बचाव के वैज्ञानिक सुझाव'
+            : 'Real-time agricultural weather context from IMD Agromet indices to anticipate fungal and pest outbreaks'}
         </p>
       </div>
 
@@ -59,10 +61,12 @@ export const WeatherPage: React.FC = () => {
             💧
           </div>
           <h4 className="font-display font-bold text-base text-forest-900 mb-1">
-            Humidity & Spore Germination
+            {language === 'hi' ? 'नमी एवं बीजाणु अंकुरण' : 'Humidity & Spore Germination'}
           </h4>
           <p className="text-xs text-gray-600 leading-relaxed">
-            At {weather.humidity}% relative humidity, fungal spores like *Alternaria* and *Phytophthora* require merely 4 to 6 hours of surface leaf moisture to penetrate leaf stomata.
+            {language === 'hi'
+              ? `${weather.humidity}% सापेक्ष आर्द्रता पर अल्टरनेरिया और फाइटोफ्थोरा जैसे फंगल बीजाणुओं को पत्तियों में प्रवेश करने के लिए मात्र 4 से 6 घंटे की नमी पर्याप्त होती है।`
+              : `At ${weather.humidity}% relative humidity, fungal spores like Alternaria and Phytophthora require merely 4 to 6 hours of surface leaf moisture to penetrate leaf stomata.`}
           </p>
         </div>
 
@@ -71,10 +75,12 @@ export const WeatherPage: React.FC = () => {
             🌡
           </div>
           <h4 className="font-display font-bold text-base text-forest-900 mb-1">
-            Temperature Windows
+            {language === 'hi' ? 'तापमान का अनुकूल चक्र' : 'Temperature Windows'}
           </h4>
           <p className="text-xs text-gray-600 leading-relaxed">
-            Current {weather.temperature}°C average is optimal for vegetable blight expansion. Cooler nights coupled with morning dew create secondary infection windows.
+            {language === 'hi'
+              ? `वर्तमान ${weather.temperature}°C औसत तापमान झुलसा रोग के विस्तार के लिए अनुकूल है। ठंडी रातें और सुबह की ओस द्वितीयक संक्रमण चक्र बनाती हैं।`
+              : `Current ${weather.temperature}°C average is optimal for vegetable blight expansion. Cooler nights coupled with morning dew create secondary infection windows.`}
           </p>
         </div>
 
@@ -83,12 +89,22 @@ export const WeatherPage: React.FC = () => {
             🛡
           </div>
           <h4 className="font-display font-bold text-base text-forest-900 mb-1">
-            Farmer Action Checklist
+            {language === 'hi' ? 'किसान भाइयों हेतु कार्य योजना' : 'Farmer Action Checklist'}
           </h4>
           <p className="text-xs text-gray-600 leading-relaxed">
-            1. Open field drain furrows.<br />
-            2. Suspend overhead sprinkler watering.<br />
-            3. Apply bio-protective Trichoderma if rain breaks for 3+ hours.
+            {language === 'hi' ? (
+              <>
+                1. खेत में जल निकासी की नालियां साफ रखें।<br />
+                2. फव्वारा सिंचाई व जलभराव रोकें।<br />
+                3. मौसम साफ होने पर ट्राइकोडर्मा या फफूंदनाशक का छिड़काव करें।
+              </>
+            ) : (
+              <>
+                1. Open field drain furrows.<br />
+                2. Suspend overhead sprinkler watering.<br />
+                3. Apply bio-protective Trichoderma if rain breaks for 3+ hours.
+              </>
+            )}
           </p>
         </div>
 

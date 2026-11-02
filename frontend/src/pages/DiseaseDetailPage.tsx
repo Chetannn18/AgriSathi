@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, BookOpen, ExternalLink, ShieldCheck, CheckCircle2, AlertCircle, Camera } from 'lucide-react';
-import { api } from '../services/api';
+import { api, formatImageUrl } from '../services/api';
 import { Disease } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 
 export const DiseaseDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { t, language } = useLanguage();
+  const { t, language, getCropName } = useLanguage();
   const [disease, setDisease] = useState<Disease | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,7 +28,7 @@ export const DiseaseDetailPage: React.FC = () => {
   if (isLoading || !disease) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center text-sm text-gray-500">
-        Loading disease protocol...
+        {language === 'hi' ? 'रोग उपचार विवरण लोड हो रहा है...' : 'Loading disease protocol...'}
       </div>
     );
   }
@@ -58,12 +58,15 @@ export const DiseaseDetailPage: React.FC = () => {
           <div className="md:col-span-5">
             <div className="relative aspect-video rounded-2xl overflow-hidden bg-forest-950 border border-forest-200 shadow-md">
               <img
-                src={disease.image_url || '/assets/demo/leaf_tomato.jpg'}
+                src={formatImageUrl(disease.image_url) || '/assets/demo/leaf_tomato.jpg'}
                 alt={disease.name}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/assets/demo/leaf_tomato.jpg';
+                }}
                 className="w-full h-full object-cover"
               />
               <div className="absolute top-2.5 left-2.5 bg-forest-950/80 backdrop-blur-xs text-white px-2.5 py-0.5 rounded text-[11px] font-semibold">
-                {disease.crop}
+                {getCropName ? getCropName(disease.crop) : disease.crop}
               </div>
             </div>
           </div>
@@ -71,17 +74,18 @@ export const DiseaseDetailPage: React.FC = () => {
           <div className="md:col-span-7 space-y-3">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-forest-600">
-                {disease.crop} Pathology
+                {getCropName ? getCropName(disease.crop) : disease.crop} {language === 'hi' ? 'पादप रोग विज्ञान' : 'Pathology'}
               </span>
               <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-0.5">
-                {disease.name}
+                {language === 'hi' && disease.name_hi ? disease.name_hi : disease.name}
               </h1>
               <p className="text-sm font-semibold text-forest-700">
-                {disease.name_hi}
+                {language === 'hi' ? disease.name : disease.name_hi}
               </p>
               {disease.scientific_name && (
                 <p className="text-xs text-gray-500 italic mt-0.5">
-                  Pathogen: {disease.scientific_name} ({disease.pathogen_type})
+                  {language === 'hi' ? 'रोगजनक (Pathogen): ' : 'Pathogen: '}
+                  {disease.scientific_name} ({disease.pathogen_type})
                 </p>
               )}
             </div>
@@ -92,7 +96,7 @@ export const DiseaseDetailPage: React.FC = () => {
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-forest-600 text-white text-xs font-semibold hover:bg-forest-700 shadow-sm transition-all"
               >
                 <Camera className="w-4 h-4 text-leaf-light" />
-                <span>Scan For This Disease</span>
+                <span>{language === 'hi' ? 'इस रोग की जांच हेतु फोटो लें' : 'Scan For This Disease'}</span>
               </Link>
             </div>
           </div>
@@ -121,7 +125,7 @@ export const DiseaseDetailPage: React.FC = () => {
         <div className="glass-panel p-6 rounded-2xl border border-forest-100 shadow-card-soft space-y-3">
           <h3 className="font-display font-bold text-base text-forest-900 flex items-center gap-2">
             <AlertCircle className="w-5 h-5 text-amber-600" />
-            <span>Environmental Triggers & Causes</span>
+            <span>{language === 'hi' ? 'अनुकूल मौसमी परिस्थितियां व कारण' : 'Environmental Triggers & Causes'}</span>
           </h3>
           <ul className="space-y-2">
             {disease.possible_causes.map((c, idx) => (
@@ -138,7 +142,7 @@ export const DiseaseDetailPage: React.FC = () => {
       {management && management.length > 0 && (
         <div className="bg-forest-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-4">
           <h3 className="font-display font-extrabold text-lg text-leaf-light">
-            Recommended Management Protocols
+            {language === 'hi' ? 'अनुशंसित वैज्ञानिक नियंत्रण उपाय' : 'Recommended Management Protocols'}
           </h3>
           <div className="space-y-2.5">
             {management.map((m, idx) => (
@@ -175,7 +179,7 @@ export const DiseaseDetailPage: React.FC = () => {
         {disease.similar_diseases && disease.similar_diseases.length > 0 && (
           <div className="glass-panel p-5 rounded-2xl border border-forest-100 shadow-card-soft">
             <h4 className="font-display font-bold text-sm text-forest-900 mb-3">
-              Differential / Similar Conditions
+              {language === 'hi' ? 'समान दिखने वाले अन्य रोग' : 'Differential / Similar Conditions'}
             </h4>
             <div className="flex flex-wrap gap-2">
               {disease.similar_diseases.map((sim, idx) => (

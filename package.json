@@ -1,0 +1,13 @@
+{
+  "name": "agrisathi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AgriSathi Multimodal AI Agricultural Assistant",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:backend": "cd backend && python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload",
+    "build": "npm --prefix frontend run build",
+    "install:all": "npm --prefix frontend install && cd backend && pip install -r requirements.txt"
+  }
+}

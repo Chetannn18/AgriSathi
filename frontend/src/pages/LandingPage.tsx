@@ -35,7 +35,9 @@ export const LandingPage: React.FC = () => {
           <img
             src="/assets/landing/hero_field_sunrise.jpg"
             alt="Sunrise agricultural field"
-            className="w-full h-full object-cover filter brightness-[0.48] contrast-[1.08] scale-105 animate-wind-drift"
+            className="w-full h-full object-cover opacity-60 scale-105 animate-wind-drift"
+            loading="eager"
+            decoding="async"
           />
           {/* Subtle gradient overlay to enhance typography contrast */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#040d0a]/75 via-[#040d0a]/30 to-[#040d0a]" />
@@ -53,22 +55,47 @@ export const LandingPage: React.FC = () => {
               {/* Trust Badge */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-forest-900/80 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-medium backdrop-blur-md shadow-lg">
                 <Sparkles className="w-3.5 h-3.5 text-leaf-light animate-pulse" />
-                <span>Multimodal Indian AgriTech • From Leaf to Action</span>
+                <span>
+                  {language === 'hi' 
+                    ? 'मल्टीमॉडल भारतीय एग्रीटेक • पत्ती से समाधान तक' 
+                    : 'Multimodal Indian AgriTech • From Leaf to Action'}
+                </span>
               </div>
 
               {/* Headline */}
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight text-white leading-[1.08]">
-                Your Crop's <br />
-                <span className="font-editorial italic font-normal bg-gradient-to-r from-emerald-300 via-leaf-light to-lime-300 bg-clip-text text-transparent">
-                  AI Companion.
-                </span>
+                {language === 'hi' ? (
+                  <>
+                    आपकी फसल का <br />
+                    <span className="font-editorial italic font-normal bg-gradient-to-r from-emerald-300 via-leaf-light to-lime-300 bg-clip-text text-transparent">
+                      सच्चा AI साथी।
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    Your Crop's <br />
+                    <span className="font-editorial italic font-normal bg-gradient-to-r from-emerald-300 via-leaf-light to-lime-300 bg-clip-text text-transparent">
+                      AI Companion.
+                    </span>
+                  </>
+                )}
               </h1>
 
               {/* Editorial Subheadline */}
               <p className="text-lg sm:text-xl text-gray-200 font-light max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                See what's happening in your crop. <br className="hidden sm:inline" />
-                Understand the problem. <br className="hidden sm:inline" />
-                <span className="text-white font-medium">Know what to do next.</span>
+                {language === 'hi' ? (
+                  <>
+                    देखें फसल में क्या हो रहा है। <br className="hidden sm:inline" />
+                    समस्या को वैज्ञानिक रूप से समझें। <br className="hidden sm:inline" />
+                    <span className="text-white font-medium">आगे क्या कदम उठाना है, सटीक जानें।</span>
+                  </>
+                ) : (
+                  <>
+                    See what's happening in your crop. <br className="hidden sm:inline" />
+                    Understand the problem. <br className="hidden sm:inline" />
+                    <span className="text-white font-medium">Know what to do next.</span>
+                  </>
+                )}
               </p>
 
               {/* Primary & Secondary Action CTAs */}
@@ -98,15 +125,15 @@ export const LandingPage: React.FC = () => {
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-2 text-xs font-mono text-emerald-200/80">
                 <span className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  Visual Diagnosis in 3 Seconds
+                  {language === 'hi' ? '3 सेकंड में दृश्य रोग निदान' : 'Visual Diagnosis in 3 Seconds'}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  Spoken Hindi & English
+                  {language === 'hi' ? 'हिंदी व अंग्रेजी भाषा समर्थन' : 'Spoken Hindi & English'}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                  Field Tested Guidance
+                  {language === 'hi' ? 'खेत-परीक्षित वैज्ञानिक सलाह' : 'Field Tested Guidance'}
                 </span>
               </div>
 
@@ -123,7 +150,7 @@ export const LandingPage: React.FC = () => {
         {/* Scroll Indicator */}
         <div className="relative z-20 flex flex-col items-center justify-center space-y-2 text-xs font-mono text-gray-400 pt-6">
           <span className="tracking-widest uppercase text-[10px] text-emerald-300">
-            Scroll to explore
+            {language === 'hi' ? 'नीचे देखें' : 'Scroll to explore'}
           </span>
           <div className="w-5 h-9 rounded-full border border-emerald-500/40 flex items-start justify-center p-1 bg-black/40 backdrop-blur-xs">
             <div className="w-1.5 h-2.5 rounded-full bg-emerald-400 animate-bounce mt-0.5" />

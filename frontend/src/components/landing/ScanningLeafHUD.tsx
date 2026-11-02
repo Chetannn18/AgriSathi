@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, Scan, CheckCircle, AlertCircle, ShieldCheck } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ScanningLeafHUDProps {
   onCheckCropClick?: () => void;
 }
 
 export const ScanningLeafHUD: React.FC<ScanningLeafHUDProps> = () => {
+  const { language } = useLanguage();
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
@@ -16,9 +18,21 @@ export const ScanningLeafHUD: React.FC<ScanningLeafHUDProps> = () => {
   }, []);
 
   const symptoms = [
-    { label: 'Leaf Pattern Analysis', status: 'Concentric rings identified', active: activeStep >= 0 },
-    { label: 'Color Variation (Chlorosis)', status: 'Halo chlorosis 14.2%', active: activeStep >= 1 },
-    { label: 'Lesion Detection & Depth', status: 'Target spot pattern', active: activeStep >= 2 },
+    { 
+      label: language === 'hi' ? 'पत्ती शिरा व लक्षण विश्लेषण' : 'Leaf Pattern Analysis', 
+      status: language === 'hi' ? 'सकेंद्रित छल्ले पहचाने गए' : 'Concentric rings identified', 
+      active: activeStep >= 0 
+    },
+    { 
+      label: language === 'hi' ? 'रंग परिवर्तन (पीलापन)' : 'Color Variation (Chlorosis)', 
+      status: 'Halo chlorosis 14.2%', 
+      active: activeStep >= 1 
+    },
+    { 
+      label: language === 'hi' ? 'धब्बा व गहराई पहचान' : 'Lesion Detection & Depth', 
+      status: 'Target spot pattern', 
+      active: activeStep >= 2 
+    },
   ];
 
   return (
@@ -38,7 +52,7 @@ export const ScanningLeafHUD: React.FC<ScanningLeafHUDProps> = () => {
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
             </span>
             <span className="text-[11px] font-mono font-bold tracking-wider text-emerald-300 uppercase">
-              CROP SCAN ACTIVE
+              {language === 'hi' ? 'फसल स्कैन सक्रिय' : 'CROP SCAN ACTIVE'}
             </span>
           </div>
 
@@ -85,10 +99,12 @@ export const ScanningLeafHUD: React.FC<ScanningLeafHUDProps> = () => {
           <div className="flex items-center justify-between text-xs text-gray-300">
             <span className="flex items-center gap-1.5 font-medium">
               <Sparkles className="w-3.5 h-3.5 text-leaf-light" />
-              Detecting symptoms...
+              {language === 'hi' ? 'लक्षणों का विश्लेषण जारी...' : 'Detecting symptoms...'}
             </span>
             <span className="text-[10px] font-mono text-emerald-300">
-              {activeStep === 3 ? 'Completed' : 'Processing'}
+              {activeStep === 3 
+                ? (language === 'hi' ? 'सत्यापित' : 'Completed') 
+                : (language === 'hi' ? 'जांच जारी' : 'Processing')}
             </span>
           </div>
 
@@ -113,7 +129,9 @@ export const ScanningLeafHUD: React.FC<ScanningLeafHUDProps> = () => {
                 {symptom.active ? (
                   <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 ) : (
-                  <span className="text-[10px] text-gray-400">waiting</span>
+                  <span className="text-[10px] text-gray-400">
+                    {language === 'hi' ? 'प्रतीक्षारत' : 'waiting'}
+                  </span>
                 )}
               </div>
             ))}
@@ -124,10 +142,10 @@ export const ScanningLeafHUD: React.FC<ScanningLeafHUDProps> = () => {
         <div className="p-3.5 rounded-xl bg-gradient-to-r from-emerald-950/90 to-forest-900/90 border border-emerald-500/40 flex items-center justify-between">
           <div>
             <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-emerald-400/90 block">
-              POSSIBLE ISSUE
+              {language === 'hi' ? 'संभावित रोग' : 'POSSIBLE ISSUE'}
             </span>
             <h4 className="text-base font-display font-bold text-white tracking-tight flex items-center gap-1.5">
-              <span>Early Blight</span>
+              <span>{language === 'hi' ? 'अगेती झुलसा' : 'Early Blight'}</span>
               <span className="text-[10px] font-normal text-emerald-300 font-sans italic">
                 (Alternaria solani)
               </span>
@@ -136,7 +154,7 @@ export const ScanningLeafHUD: React.FC<ScanningLeafHUDProps> = () => {
 
           <div className="text-right">
             <span className="text-[10px] font-mono uppercase tracking-wider text-gray-300 block">
-              Confidence
+              {language === 'hi' ? 'विश्वसनीयता' : 'Confidence'}
             </span>
             <span className="text-lg font-mono font-extrabold text-leaf-light">
               91%
@@ -148,7 +166,7 @@ export const ScanningLeafHUD: React.FC<ScanningLeafHUDProps> = () => {
         <div className="mt-3 flex items-center justify-between text-[10px] text-gray-400 font-mono px-1">
           <span className="flex items-center gap-1 text-emerald-400/80">
             <ShieldCheck className="w-3 h-3 text-emerald-400" />
-            ICAR Grounded Intelligence
+            {language === 'hi' ? 'ICAR प्रमाणित बुद्धिमता' : 'ICAR Grounded Intelligence'}
           </span>
           <span className="text-gray-400">Model: Vision-Agri-v2</span>
         </div>

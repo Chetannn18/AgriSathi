@@ -5,11 +5,33 @@ const API_BASE = 'http://localhost:8000/api';
 
 const LOCAL_STORAGE_KEY = 'agrisathi_saved_diagnoses';
 
+export function formatImageUrl(url?: string): string {
+  if (!url) return '/assets/demo/leaf_tomato.jpg';
+  if (url.startsWith('blob:') || url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+  if (url.startsWith('/uploads/')) {
+    return `http://127.0.0.1:8000${url}`;
+  }
+  return url;
+}
+
+export function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => resolve('/assets/demo/leaf_tomato.jpg');
+    reader.readAsDataURL(file);
+  });
+}
+
 function saveLocalDiagnosis(diag: any) {
   try {
+    if (diag.image_url) {
+      diag.image_url = formatImageUrl(diag.image_url);
+    }
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     const list = raw ? JSON.parse(raw) : [];
-    // remove existing if same id
     const filtered = list.filter((item: any) => item.id !== diag.id);
     filtered.unshift(diag);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered.slice(0, 30)));
@@ -23,7 +45,11 @@ function getLocalDiagnosis(id: number): Diagnosis | null {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!raw) return null;
     const list = JSON.parse(raw);
-    return list.find((item: any) => Number(item.id) === Number(id)) || null;
+    const found = list.find((item: any) => Number(item.id) === Number(id)) || null;
+    if (found && found.image_url) {
+      found.image_url = formatImageUrl(found.image_url);
+    }
+    return found;
   } catch {
     return null;
   }
@@ -32,7 +58,12 @@ function getLocalDiagnosis(id: number): Diagnosis | null {
 function getAllLocalDiagnoses(): Diagnosis[] {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const list = JSON.parse(raw);
+    return list.map((item: any) => ({
+      ...item,
+      image_url: formatImageUrl(item.image_url)
+    }));
   } catch {
     return [];
   }
@@ -83,6 +114,7 @@ export const api = {
 
   // Diagnose Image
   diagnoseImage: async (file: File, farmId?: number, farmCrop?: string): Promise<any> => {
+    const dataUrl = await fileToDataUrl(file);
     const formData = new FormData();
     formData.append('file', file);
     if (farmId) formData.append('farm_id', farmId.toString());
@@ -95,6 +127,8 @@ export const api = {
       });
       if (res.ok) {
         const data = await res.json();
+        // Keep crisp user data URL or format server upload URL
+        data.image_url = data.image_url ? formatImageUrl(data.image_url) : dataUrl;
         saveLocalDiagnosis(data);
         return data;
       }
@@ -134,7 +168,7 @@ export const api = {
         rain_probability: 65.0,
         risk_note: 'Recent rainfall + high humidity may increase the risk of fungal disease.'
       },
-      image_url: URL.createObjectURL(file),
+      image_url: dataUrl,
       created_at: new Date().toISOString()
     };
 
@@ -151,6 +185,9 @@ export const api = {
       const res = await fetch(`${API_BASE}/diagnosis/${id}`);
       if (res.ok) {
         const serverData = await res.json();
+        if (serverData.image_url) {
+          serverData.image_url = formatImageUrl(serverData.image_url);
+        }
         saveLocalDiagnosis(serverData);
         return serverData;
       }
@@ -158,11 +195,11 @@ export const api = {
       // Fallback
     }
 
-    // Default soybean or tomato fallback if record not found
+    // Default Tomato Early Blight fallback if record not found
     return localMatch || {
       id: id,
-      crop: 'Soybean',
-      possible_disease: 'Frogeye Leaf Spot (Cercospora sojina)',
+      crop: 'Tomato',
+      possible_disease: 'Early Blight (Alternaria solani)',
       disease_name_hi: 'अगेती झुलसा (अर्ली ब्लाइट)',
       confidence: 0.91,
       severity: 'Moderate',
@@ -322,6 +359,48 @@ export const api = {
         expert_status: 'pending',
         image_url: '/assets/demo/leaf_rice.jpg',
         created_at: '2026-09-21T09:15:00Z'
+      },
+      {
+        id: 4,
+        crop: 'Soybean',
+        possible_disease: 'Frogeye Leaf Spot (Cercospora sojina)',
+        disease_name_hi: 'सोयाबीन — मेंढक आँख जैसा धब्बा रोग',
+        confidence: 0.94,
+        severity: 'Moderate',
+        observed_symptoms: ['Circular spots with tan centers and dark reddish borders'],
+        immediate_actions: ['Spray Pyraclostrobin 20% WG @ 1g/L', 'Ensure drainage'],
+        immediate_actions_hi: ['पायराक्लोस्ट्रोबिन (1 ग्राम/लीटर) छिड़कें', 'जल निकासी रखें'],
+        prevention: ['Crop rotation', 'Certified seed'],
+        prevention_hi: ['फसल चक्र अपनाएं', 'प्रमाणित बीज'],
+        monitoring: ['Inspect lower leaves'],
+        monitoring_hi: ['निचली पत्तियों की जांच'],
+        differential_diagnosis: [],
+        warnings: [],
+        sources: [],
+        expert_status: 'reviewed',
+        image_url: '/assets/demo/leaf_soybean_frogeye_spot.jpg',
+        created_at: '2026-09-18T10:00:00Z'
+      },
+      {
+        id: 5,
+        crop: 'Soybean',
+        possible_disease: 'Target Spot & Leaf Blight',
+        disease_name_hi: 'सोयाबीन — टारगेट स्पॉट / पर्ण अंगमारी',
+        confidence: 0.92,
+        severity: 'Moderate',
+        observed_symptoms: ['Concentric circular target rings with chlorotic yellow halo'],
+        immediate_actions: ['Spray Fluxapyroxad + Pyraclostrobin', 'Avoid overhead splash'],
+        immediate_actions_hi: ['फ्लक्सापायरोक्साड + पायराक्लोस्ट्रोबिन छिड़कें', 'फव्वारा सिंचाई न करें'],
+        prevention: ['Deep summer ploughing'],
+        prevention_hi: ['ग्रीष्मकालीन गहरी जुताई करें'],
+        monitoring: ['Weekly field scout'],
+        monitoring_hi: ['साप्ताहिक निरीक्षण करें'],
+        differential_diagnosis: [],
+        warnings: [],
+        sources: [],
+        expert_status: 'reviewed',
+        image_url: '/assets/demo/leaf_soybean_target_spot.jpg',
+        created_at: '2026-09-15T11:20:00Z'
       }
     ];
   },

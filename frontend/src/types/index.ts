@@ -48,6 +48,7 @@ export interface ExpertReviewItem {
 export interface Diagnosis {
   id: number;
   crop: string;
+  crop_hi?: string;
   possible_disease: string;
   disease_name_hi?: string;
   confidence: number;
@@ -65,6 +66,7 @@ export interface Diagnosis {
   monitoring_hi: string[];
   differential_diagnosis: DifferentialItem[];
   warnings: string[];
+  warnings_hi?: string[];
   sources: SourceCitation[];
   weather_context?: {
     temperature: number;

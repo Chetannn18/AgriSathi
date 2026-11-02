@@ -39,7 +39,9 @@ export const WeatherCard: React.FC<Props> = ({ weather, compact = false }) => {
         <div className="bg-forest-50/70 p-2.5 rounded-xl border border-forest-100/60 flex items-center gap-2">
           <Droplets className="w-5 h-5 text-sky-600 shrink-0" />
           <div>
-            <span className="text-[10px] text-gray-500 block uppercase font-medium">Humidity</span>
+            <span className="text-[10px] text-gray-500 block uppercase font-medium">
+              {language === 'hi' ? 'नमी (आर्द्रता)' : 'Humidity'}
+            </span>
             <span className="text-xs font-bold text-forest-900">{weather.humidity}%</span>
           </div>
         </div>
@@ -47,7 +49,9 @@ export const WeatherCard: React.FC<Props> = ({ weather, compact = false }) => {
         <div className="bg-forest-50/70 p-2.5 rounded-xl border border-forest-100/60 flex items-center gap-2">
           <CloudRain className="w-5 h-5 text-indigo-600 shrink-0" />
           <div>
-            <span className="text-[10px] text-gray-500 block uppercase font-medium">Rain Risk</span>
+            <span className="text-[10px] text-gray-500 block uppercase font-medium">
+              {language === 'hi' ? 'बारिश की संभावना' : 'Rain Risk'}
+            </span>
             <span className="text-xs font-bold text-forest-900">{weather.rain_probability}%</span>
           </div>
         </div>
@@ -55,7 +59,9 @@ export const WeatherCard: React.FC<Props> = ({ weather, compact = false }) => {
         <div className="bg-forest-50/70 p-2.5 rounded-xl border border-forest-100/60 flex items-center gap-2">
           <Wind className="w-5 h-5 text-teal-600 shrink-0" />
           <div>
-            <span className="text-[10px] text-gray-500 block uppercase font-medium">Wind</span>
+            <span className="text-[10px] text-gray-500 block uppercase font-medium">
+              {language === 'hi' ? 'हवा की गति' : 'Wind'}
+            </span>
             <span className="text-xs font-bold text-forest-900">{weather.wind_speed} km/h</span>
           </div>
         </div>
@@ -82,7 +88,7 @@ export const WeatherCard: React.FC<Props> = ({ weather, compact = false }) => {
       {!compact && weather.forecast_data && weather.forecast_data.length > 0 && (
         <div className="mt-4 pt-4 border-t border-forest-100">
           <span className="text-xs font-semibold text-forest-700 block mb-2.5">
-            5-Day Agromet Forecast
+            {language === 'hi' ? '5 दिवसीय कृषि मौसम पूर्वानुमान' : '5-Day Agromet Forecast'}
           </span>
           <div className="grid grid-cols-5 gap-1.5 text-center">
             {weather.forecast_data.map((f, i) => (

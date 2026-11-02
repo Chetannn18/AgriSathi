@@ -109,31 +109,39 @@ export const ScanPage: React.FC = () => {
 
   const handleDemoCase = async (demo: typeof demoCases[0]) => {
     setSelectedCrop(demo.crop);
-    // Fetch demo image as blob to simulate file upload
+    setPreviewUrl(demo.img);
+    setQualityResult({
+      is_valid: true,
+      message: 'Image quality is good for AI diagnosis.',
+      message_hi: 'एआई निदान के लिए तस्वीर की गुणवत्ता अच्छी है।',
+      resolution_ok: true,
+      brightness_ok: true,
+      blur_ok: true,
+      suggestions: [],
+      suggestions_hi: []
+    });
+
+    // Fetch demo image as file in background for diagnosis payload
     try {
       const response = await fetch(demo.img);
       const blob = await response.blob();
       const file = new File([blob], `${demo.id}_sample.jpg`, { type: 'image/jpeg' });
-      handleFileSelection(file);
+      setSelectedFile(file);
     } catch {
-      setPreviewUrl(demo.img);
-      setQualityResult({
-        is_valid: true,
-        message: 'Image quality is good for AI diagnosis.',
-        message_hi: 'एआई निदान के लिए तस्वीर की गुणवत्ता अच्छी है।',
-        resolution_ok: true,
-        brightness_ok: true,
-        blur_ok: true,
-        suggestions: [],
-        suggestions_hi: []
-      });
+      // previewUrl is already set and ready
     }
   };
+
+  const animFinishedRef = useRef(false);
+  const resultIdRef = useRef<number | null>(null);
 
   const startAnalysis = async () => {
     if (!selectedFile && !previewUrl) return;
 
     setIsScanning(true);
+    animFinishedRef.current = false;
+    resultIdRef.current = null;
+
     try {
       const fileToSend = selectedFile || new File(["dummy"], `${selectedCrop ? selectedCrop.toLowerCase() : 'crop'}_leaf.jpg`, { type: "image/jpeg" });
       const result = await api.diagnoseImage(fileToSend, undefined, selectedCrop || undefined);
@@ -144,18 +152,27 @@ export const ScanPage: React.FC = () => {
         return;
       }
 
-      setDiagnosisId(result.diagnosis_id || result.id || 1);
+      const targetId = result.diagnosis_id || result.id || 1;
+      resultIdRef.current = targetId;
+      setDiagnosisId(targetId);
+
+      if (animFinishedRef.current) {
+        navigate(`/diagnosis/${targetId}`);
+      }
     } catch (e) {
       console.error('Diagnosis error:', e);
+      resultIdRef.current = 1;
       setDiagnosisId(1);
+      if (animFinishedRef.current) {
+        navigate('/diagnosis/1');
+      }
     }
   };
 
   const onScanComplete = () => {
-    if (diagnosisId) {
-      navigate(`/diagnosis/${diagnosisId}`);
-    } else {
-      navigate('/diagnosis/1');
+    animFinishedRef.current = true;
+    if (resultIdRef.current) {
+      navigate(`/diagnosis/${resultIdRef.current}`);
     }
   };
 
@@ -165,13 +182,13 @@ export const ScanPage: React.FC = () => {
       {/* Header */}
       <div className="text-center max-w-xl mx-auto mb-8">
         <span className="text-xs font-bold uppercase tracking-wider text-forest-600 block">
-          Computer Vision Diagnostics
+          {t('cvDiagnosticsTitle')}
         </span>
         <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-1">
           {t('checkCrop')}
         </h1>
         <p className="text-xs sm:text-sm text-gray-600 mt-1">
-          Upload or take a photo of an affected leaf for instant AI disease identification
+          {t('scanPageSubtitle')}
         </p>
       </div>
 
@@ -185,15 +202,15 @@ export const ScanPage: React.FC = () => {
           <div className="glass-panel p-4 rounded-2xl border border-forest-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
             <div className="flex items-center gap-2">
               <span className="text-xs font-bold text-forest-900">
-                {language === 'hi' ? '🌱 फसल चुनें:' : '🌱 Target Crop:'}
+                🌱 {t('targetCropLabel')}
               </span>
               <span className="text-[11px] text-gray-500">
-                {language === 'hi' ? '(सटीक पत्ती रोग विश्लेषण हेतु)' : '(tailors diagnosis to crop pathogen rules)'}
+                {t('targetCropHint')}
               </span>
             </div>
             <div className="flex items-center gap-1.5 flex-wrap">
               {[
-                { id: '', label: language === 'hi' ? '✨ ऑटो (AI पहचान)' : '✨ Auto-Detect' },
+                { id: '', label: `✨ ${t('autoDetect')}` },
                 { id: 'Soybean', label: language === 'hi' ? 'सोयाबीन' : 'Soybean' },
                 { id: 'Tomato', label: language === 'hi' ? 'टमाटर' : 'Tomato' },
                 { id: 'Potato', label: language === 'hi' ? 'आलू' : 'Potato' },
@@ -228,6 +245,9 @@ export const ScanPage: React.FC = () => {
                     src={previewUrl}
                     alt="Uploaded leaf"
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = '/assets/demo/leaf_tomato.jpg';
+                    }}
                   />
                 </div>
 
@@ -235,7 +255,7 @@ export const ScanPage: React.FC = () => {
                 {isEvaluatingQuality ? (
                   <div className="text-xs text-forest-700 font-semibold flex items-center justify-center gap-2">
                     <RefreshCw className="w-4 h-4 animate-spin text-forest-600" />
-                    <span>Verifying image resolution & lighting quality...</span>
+                    <span>{t('verifyingQuality')}</span>
                   </div>
                 ) : qualityResult && !qualityResult.is_valid ? (
                   <div className="bg-rose-50 border border-rose-200 p-4 rounded-xl text-left max-w-md mx-auto">
@@ -266,7 +286,7 @@ export const ScanPage: React.FC = () => {
                   <div className="space-y-3">
                     <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span>{language === 'hi' ? qualityResult?.message_hi || 'तस्वीर स्पष्ट है' : qualityResult?.message || 'Quality verified'}</span>
+                      <span>{language === 'hi' ? qualityResult?.message_hi || 'तस्वीर स्पष्ट है' : qualityResult?.message || t('qualityVerified')}</span>
                     </div>
 
                     <div>
@@ -288,7 +308,7 @@ export const ScanPage: React.FC = () => {
                         }}
                         className="text-xs text-gray-500 hover:text-gray-700 underline font-medium"
                       >
-                        Choose another photo
+                        {t('chooseAnotherPhoto')}
                       </button>
                     </div>
                   </div>
@@ -360,10 +380,10 @@ export const ScanPage: React.FC = () => {
             <div className="flex items-center justify-between mb-3">
               <h3 className="font-display font-bold text-base text-forest-900 flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-leaf-dark" />
-                <span>Quick Test with Preconfigured Demo Cases</span>
+                <span>{t('quickTestCases')}</span>
               </h3>
               <span className="text-xs font-semibold text-forest-700 bg-forest-50 px-2 py-0.5 rounded-full border border-forest-200">
-                1-Click Demo
+                {t('oneClickDemo')}
               </span>
             </div>
 
@@ -378,16 +398,19 @@ export const ScanPage: React.FC = () => {
                     src={demo.img}
                     alt={demo.title}
                     className="w-14 h-14 rounded-xl object-cover border border-forest-200 shrink-0 group-hover:scale-105 transition-transform"
+                    onError={(e) => {
+                      e.currentTarget.src = '/assets/demo/leaf_tomato.jpg';
+                    }}
                   />
                   <div className="min-w-0">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-forest-600 block">
-                      {demo.crop}
+                      {language === 'hi' ? (demo.crop === 'Soybean' ? 'सोयाबीन' : demo.crop === 'Tomato' ? 'टमाटर' : demo.crop === 'Potato' ? 'आलू' : demo.crop === 'Rice' ? 'धान' : demo.crop === 'Cotton' ? 'कपास' : demo.crop) : demo.crop}
                     </span>
                     <h4 className="font-bold text-xs text-forest-900 truncate">
                       {language === 'hi' ? demo.title_hi : demo.title}
                     </h4>
                     <span className="text-[10px] text-gray-500 flex items-center gap-0.5 mt-0.5">
-                      <span>Click to Test</span>
+                      <span>{t('clickToTest')}</span>
                       <ChevronRight className="w-3 h-3 text-forest-600" />
                     </span>
                   </div>

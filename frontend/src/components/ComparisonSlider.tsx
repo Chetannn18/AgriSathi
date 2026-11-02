@@ -36,40 +36,41 @@ export const ComparisonSlider: React.FC<Props> = ({
       </div>
 
       {/* Interactive Visual Split View Container */}
-      <div className="relative w-full aspect-video rounded-xl overflow-hidden select-none bg-forest-950 border border-forest-200">
+      <div className="relative w-full aspect-video rounded-xl overflow-hidden select-none bg-forest-950 border border-forest-200 shadow-md">
         
-        {/* Right / After Image (Underneath) */}
+        {/* Right / After Image (Underneath, full size) */}
         <img
           src={afterImage}
-          alt="Day 7 leaf status"
+          alt="Day 7 post-treatment status"
           className="absolute inset-0 w-full h-full object-cover"
         />
-        <div className="absolute top-3 right-3 bg-forest-950/80 backdrop-blur-xs text-white px-2.5 py-1 rounded text-xs font-semibold z-10">
-          {t('afterTreatment')} ({afterDate})
+        <div className="absolute top-3 right-3 bg-emerald-950/85 backdrop-blur-xs text-emerald-200 border border-emerald-500/30 px-2.5 py-1 rounded text-xs font-semibold z-10 shadow-sm flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-emerald-400" />
+          <span>{t('afterTreatment')} ({afterDate})</span>
         </div>
 
-        {/* Left / Before Image (Clipped) */}
+        {/* Left / Before Image (Clipped overlay with 100% uncompressed width) */}
         <div
-          className="absolute inset-0 overflow-hidden"
-          style={{ width: `${sliderPos}%` }}
+          className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
+          style={{ clipPath: `inset(0 ${100 - sliderPos}% 0 0)` }}
         >
           <img
             src={beforeImage}
             alt="Day 1 initial diagnosis"
-            className="absolute inset-0 w-full h-full object-cover max-w-none"
-            style={{ width: '100%', height: '100%' }}
+            className="absolute inset-0 w-full h-full object-cover"
           />
-          <div className="absolute top-3 left-3 bg-forest-950/80 backdrop-blur-xs text-white px-2.5 py-1 rounded text-xs font-semibold z-10">
-            {t('beforeTreatment')} ({beforeDate})
+          <div className="absolute top-3 left-3 bg-amber-950/85 backdrop-blur-xs text-amber-200 border border-amber-500/30 px-2.5 py-1 rounded text-xs font-semibold z-10 pointer-events-auto shadow-sm flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-amber-400" />
+            <span>{t('beforeTreatment')} ({beforeDate})</span>
           </div>
         </div>
 
         {/* Split Divider Bar */}
         <div
-          className="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_10px_rgba(0,0,0,0.5)] cursor-ew-resize flex items-center justify-center pointer-events-none"
+          className="absolute top-0 bottom-0 w-1 bg-white shadow-[0_0_12px_rgba(0,0,0,0.7)] cursor-ew-resize flex items-center justify-center pointer-events-none z-20"
           style={{ left: `${sliderPos}%` }}
         >
-          <div className="w-8 h-8 rounded-full bg-forest-600 text-white shadow-lg flex items-center justify-center text-xs font-bold border-2 border-white pointer-events-auto">
+          <div className="w-8 h-8 rounded-full bg-forest-600 text-white shadow-xl flex items-center justify-center text-xs font-bold border-2 border-white pointer-events-auto active:scale-110 transition-transform">
             ↔
           </div>
         </div>
@@ -81,15 +82,15 @@ export const ComparisonSlider: React.FC<Props> = ({
           max="100"
           value={sliderPos}
           onChange={(e) => setSliderPos(Number(e.target.value))}
-          className="absolute inset-0 opacity-0 cursor-ew-resize w-full h-full z-20"
+          className="absolute inset-0 opacity-0 cursor-ew-resize w-full h-full z-30"
           aria-label="Image comparison slider"
         />
       </div>
 
       <div className="flex items-center justify-between text-xs text-gray-500 mt-3 px-1">
-        <span>← {t('beforeTreatment')}</span>
-        <span className="font-medium text-forest-700">Drag center slider to inspect tissue recovery</span>
-        <span>{t('afterTreatment')} →</span>
+        <span className="text-amber-800 font-medium">← {t('beforeTreatment')} (संक्रमण)</span>
+        <span className="font-semibold text-forest-700 hidden sm:inline">स्लाइडर को बीच में खिसका कर 7 दिनों के सुधार की तुलना करें</span>
+        <span className="text-emerald-700 font-medium">{t('afterTreatment')} (उपचारित) →</span>
       </div>
     </div>
   );

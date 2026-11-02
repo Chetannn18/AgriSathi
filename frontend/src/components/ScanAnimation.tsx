@@ -12,10 +12,10 @@ export const ScanAnimation: React.FC<Props> = ({ imageUrl, onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [
-    { label: t('stepReading'), duration: 900 },
-    { label: t('stepDetecting'), duration: 1100 },
-    { label: t('stepComparing'), duration: 1200 },
-    { label: t('stepPreparing'), duration: 800 },
+    { label: t('stepReading'), duration: 220 },
+    { label: t('stepDetecting'), duration: 250 },
+    { label: t('stepComparing'), duration: 260 },
+    { label: t('stepPreparing'), duration: 200 },
   ];
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export const ScanAnimation: React.FC<Props> = ({ imageUrl, onComplete }) => {
     } else {
       timer = setTimeout(() => {
         onComplete();
-      }, 500);
+      }, 120);
     }
     return () => clearTimeout(timer);
   }, [currentStep]);

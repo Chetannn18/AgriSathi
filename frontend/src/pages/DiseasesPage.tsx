@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, BookOpen, ChevronRight, ShieldAlert, Sparkles, Filter } from 'lucide-react';
-import { api } from '../services/api';
+import { api, formatImageUrl } from '../services/api';
 import { Disease } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 
 export const DiseasesPage: React.FC = () => {
-  const { t, language } = useLanguage();
+  const { t, language, getCropName } = useLanguage();
   const [diseases, setDiseases] = useState<Disease[]>([]);
   const [selectedCrop, setSelectedCrop] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -14,14 +14,14 @@ export const DiseasesPage: React.FC = () => {
 
   const crops = [
     'all',
+    'Soybean',
     'Tomato',
     'Potato',
+    'Wheat',
     'Rice',
     'Cotton',
     'Chilli',
-    'Wheat',
-    'Maize',
-    'Soybean'
+    'Maize'
   ];
 
   useEffect(() => {
@@ -53,13 +53,15 @@ export const DiseasesPage: React.FC = () => {
       {/* Header */}
       <div>
         <span className="text-xs font-bold uppercase tracking-wider text-forest-600 block">
-          Verified Field Encyclopedia
+          {language === 'hi' ? 'प्रमाणित फसल रोग ज्ञानकोश' : 'Verified Field Encyclopedia'}
         </span>
         <h1 className="font-display font-extrabold text-2xl sm:text-3xl text-forest-900 mt-1">
           {t('diseaseLibrary')}
         </h1>
         <p className="text-xs sm:text-sm text-gray-600 mt-0.5">
-          Comprehensive pathological catalog across 8 major Indian crops with ICAR prevention protocols
+          {language === 'hi'
+            ? 'प्रमुख भारतीय फसलों के पादप रोग, लक्षण पहचान व ICAR वैज्ञानिक रोकथाम प्रोटोकॉल'
+            : 'Comprehensive pathological catalog across major Indian crops with ICAR prevention protocols'}
         </p>
       </div>
 
@@ -73,7 +75,7 @@ export const DiseasesPage: React.FC = () => {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search crop or disease (e.g. Blight, Blast, Rust)..."
+            placeholder={language === 'hi' ? 'फसल या रोग का नाम खोजें (उदा. झुलसा, रस्ट, फफूंद)...' : 'Search crop or disease (e.g. Blight, Blast, Rust)...'}
             className="w-full pl-10 pr-4 py-2 text-sm bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-forest-500 shadow-xs"
           />
         </div>
@@ -90,7 +92,7 @@ export const DiseasesPage: React.FC = () => {
                   : 'bg-forest-50 text-forest-800 hover:bg-forest-100 border border-forest-100'
               }`}
             >
-              {crop === 'all' ? t('allCrops') : crop}
+              {crop === 'all' ? t('allCrops') : (getCropName ? getCropName(crop) : crop)}
             </button>
           ))}
         </div>
@@ -109,12 +111,15 @@ export const DiseasesPage: React.FC = () => {
               {/* Image Preview Banner */}
               <div className="relative aspect-video w-full bg-forest-950 overflow-hidden">
                 <img
-                  src={d.image_url || '/assets/demo/leaf_tomato.jpg'}
+                  src={formatImageUrl(d.image_url) || '/assets/demo/leaf_tomato.jpg'}
                   alt={d.name}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/assets/demo/leaf_tomato.jpg';
+                  }}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute top-2.5 left-2.5 bg-forest-950/80 backdrop-blur-xs text-white px-2.5 py-0.5 rounded text-[11px] font-semibold">
-                  {d.crop}
+                  {getCropName ? getCropName(d.crop) : d.crop}
                 </div>
                 <div className="absolute top-2.5 right-2.5 bg-forest-950/80 backdrop-blur-xs text-leaf-light px-2 py-0.5 rounded text-[10px] font-mono">
                   {d.pathogen_type}
@@ -125,10 +130,10 @@ export const DiseasesPage: React.FC = () => {
               <div className="p-5 space-y-3">
                 <div>
                   <h3 className="font-display font-bold text-lg text-forest-900 group-hover:text-forest-700 transition-colors">
-                    {d.name}
+                    {language === 'hi' && d.name_hi ? d.name_hi : d.name}
                   </h3>
                   <p className="text-xs text-forest-600 font-semibold mt-0.5">
-                    {d.name_hi}
+                    {language === 'hi' ? d.name : d.name_hi}
                   </p>
                   {d.scientific_name && (
                     <p className="text-[11px] text-gray-500 italic mt-0.5">
@@ -139,7 +144,7 @@ export const DiseasesPage: React.FC = () => {
 
                 <div className="space-y-1 text-xs text-gray-600">
                   <span className="font-bold text-[10px] uppercase text-forest-700 block">
-                    Key Symptom:
+                    {language === 'hi' ? 'प्रमुख लक्षण:' : 'Key Symptom:'}
                   </span>
                   <p className="line-clamp-2">
                     {language === 'hi' && d.symptoms_hi?.length ? d.symptoms_hi[0] : d.symptoms[0]}
@@ -150,7 +155,7 @@ export const DiseasesPage: React.FC = () => {
 
             {/* Footer */}
             <div className="px-5 pb-5 pt-2 border-t border-forest-100 flex items-center justify-between text-xs text-forest-700 font-semibold group-hover:text-forest-900">
-              <span>View ICAR Protocol</span>
+              <span>{language === 'hi' ? 'रोकथाम व उपचार देखें' : 'View ICAR Protocol'}</span>
               <ChevronRight className="w-4 h-4 text-forest-600 group-hover:translate-x-1 transition-transform" />
             </div>
           </Link>
